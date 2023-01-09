@@ -1,6 +1,13 @@
 package domain
 
-import "fmt"
+import (
+	"errors"
+	"fmt"
+)
+
+var (
+	ErrorUserNotFound = errors.New("User not found.")
+)
 
 type User struct {
 	ID        uint

@@ -1,7 +1,6 @@
 package application
 
 import (
-	"errors"
 	domain "github.com/ismailbayram/shopping/pkg/users/domain/models"
 	"github.com/ismailbayram/shopping/test/mocks"
 	"github.com/stretchr/testify/assert"
@@ -21,7 +20,7 @@ var (
 )
 
 func TestUserService_GetByID(t *testing.T) {
-	mockedUR.On("GetByID", uint(1)).Return(nil, errors.New("User Could Not Found"))
+	mockedUR.On("GetByID", uint(1)).Return(nil, domain.ErrorUserNotFound)
 	user, err := US.GetByID(1)
 	assert.Nil(t, user)
 	assert.NotNil(t, err)
@@ -34,7 +33,7 @@ func TestUserService_GetByID(t *testing.T) {
 }
 
 func TestUserService_IsVerified(t *testing.T) {
-	mockedER.On("GetPrimaryOfUser", userIsmail).Return(nil, errors.New("Email Not Found"))
+	mockedER.On("GetPrimaryOfUser", userIsmail).Return(nil, domain.ErrorEmailNotFound)
 	isVerified := US.IsVerified(userIsmail)
 	assert.False(t, isVerified)
 

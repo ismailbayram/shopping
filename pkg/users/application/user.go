@@ -1,7 +1,9 @@
 package application
 
 import (
+	"errors"
 	domain "github.com/ismailbayram/shopping/pkg/users/domain/models"
+	"log"
 )
 
 type UserRepository interface {
@@ -31,7 +33,9 @@ func (us *UserService) GetByID(id uint) (*domain.User, error) {
 func (us *UserService) IsVerified(user *domain.User) bool {
 	email, err := us.emailRepo.GetPrimaryOfUser(user)
 	if err != nil {
-		// TODO: log
+		if !errors.Is(err, domain.ErrorEmailNotFound) {
+			log.Println(err)
+		}
 		return false
 	}
 
