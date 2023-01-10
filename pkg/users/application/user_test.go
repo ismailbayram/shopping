@@ -1,47 +1,68 @@
 package application
 
 import (
+	"errors"
 	domain "github.com/ismailbayram/shopping/pkg/users/domain/models"
 	"github.com/ismailbayram/shopping/test/mocks"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
 
-var (
-	mockedUR = &mocks.UserRepository{}
-	mockedER = &mocks.EmailRepository{}
+func TestUserService_Register_Failed(t *testing.T) {
+	mockedUR := &mocks.UserRepository{}
+	US := NewUserService(mockedUR)
 
-	US = NewUserService(mockedUR, mockedER)
+	mockedUR.On("GetByEmail", "iso@iso.com").Return(&domain.User{}, nil)
+	err := US.Register("iso@iso.com", "123456", "ismail", "bayram")
+	assert.True(t, errors.Is(err, domain.ErrorUserAlreadyExists))
+}
 
-	userIsmail = &domain.User{
+func TestUserService_Register_Success(t *testing.T) {
+	mockedUR := &mocks.UserRepository{}
+	US := NewUserService(mockedUR)
+
+	mockedUR.On("GetByEmail", "iso@iso.com").Return(nil, nil)
+	mockedUR.On(
+		"Create",
+		&domain.User{
+			Email:     "iso@iso.com",
+			FirstName: "ismail",
+			LastName:  "bayram",
+			IsActive:  true,
+			Password:  "123456",
+		},
+	).Return(
+		&domain.User{
+			ID:        3,
+			Email:     "iso@iso.com",
+			FirstName: "ismail",
+			LastName:  "bayram",
+			IsActive:  true,
+			Password:  "123456",
+		},
+		nil,
+	)
+	err := US.Register("iso@iso.com", "123456", "ismail", "bayram")
+	assert.Nil(t, err)
+}
+
+func TestUserService_GetByID(t *testing.T) {
+	user := &domain.User{
 		ID:       2,
 		IsActive: true,
 	}
-)
 
-func TestUserService_GetByID(t *testing.T) {
+	mockedUR := &mocks.UserRepository{}
+	US := NewUserService(mockedUR)
+
 	mockedUR.On("GetByID", uint(1)).Return(nil, domain.ErrorUserNotFound)
-	user, err := US.GetByID(1)
-	assert.Nil(t, user)
+	userGot, err := US.GetByID(1)
+	assert.Nil(t, userGot)
 	assert.NotNil(t, err)
 
-	mockedUR.On("GetByID", uint(2)).Return(userIsmail, nil)
-	user, err = US.GetByID(2)
-	assert.NotNil(t, user)
+	mockedUR.On("GetByID", uint(2)).Return(user, nil)
+	userGot, err = US.GetByID(2)
+	assert.NotNil(t, userGot)
 	assert.Nil(t, err)
-	assert.Equal(t, user.ID, userIsmail.ID)
-}
-
-func TestUserService_IsVerified(t *testing.T) {
-	mockedER.On("GetPrimaryOfUser", userIsmail).Return(nil, domain.ErrorEmailNotFound)
-	isVerified := US.IsVerified(userIsmail)
-	assert.False(t, isVerified)
-
-	mockedER.On("GetPrimaryOfUser", userIsmail).Return(&domain.Email{IsVerified: false}, nil)
-	isVerified = US.IsVerified(userIsmail)
-	assert.False(t, isVerified)
-
-	mockedER.On("GetPrimaryOfUser", userIsmail).Return(&domain.Email{IsVerified: true}, nil)
-	isVerified = US.IsVerified(userIsmail)
-	assert.False(t, isVerified)
+	assert.Equal(t, user.ID, userGot.ID)
 }

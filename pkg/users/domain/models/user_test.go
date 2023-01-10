@@ -12,7 +12,6 @@ func TestUser_GetFullName(t *testing.T) {
 		FirstName: "ismail",
 		LastName:  "bayram",
 		IsActive:  false,
-		Phone:     "",
 	}
 	assert.Equal(t, "ismail bayram", user.GetFullName())
 }

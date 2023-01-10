@@ -6,16 +6,18 @@ import (
 )
 
 var (
-	ErrorUserNotFound = errors.New("User not found.")
+	ErrorUserNotFound      = errors.New("User not found.")
+	ErrorUserAlreadyExists = errors.New("User with this e-mail already exists.")
 )
 
 type User struct {
-	ID        uint
-	Email     string
-	FirstName string
-	LastName  string
-	IsActive  bool
-	Phone     string
+	ID         uint
+	Email      string
+	FirstName  string
+	LastName   string
+	IsActive   bool
+	IsVerified bool
+	Password   string
 }
 
 func (u *User) GetFullName() string {
