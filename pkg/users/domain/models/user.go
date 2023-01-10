@@ -9,6 +9,7 @@ var (
 	ErrorGeneral           = errors.New("Something went wrong, please try again.")
 	ErrorUserNotFound      = errors.New("User not found.")
 	ErrorUserAlreadyExists = errors.New("User with this e-mail already exists.")
+	ErrorWrongPassword     = errors.New("Password is invalid.")
 )
 
 type User struct {

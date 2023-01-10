@@ -1,6 +1,9 @@
 package application
 
 import (
+	"crypto/sha256"
+	"encoding/hex"
+	"fmt"
 	domain "github.com/ismailbayram/shopping/pkg/users/domain/models"
 	"log"
 )
@@ -40,6 +43,27 @@ func (us *UserService) GetByID(id uint) (*domain.User, error) {
 	return us.repo.GetByID(id)
 }
 
+func (us *UserService) GetByToken(token string) (*domain.User, error) {
+	return us.repo.GetByToken(token)
+}
+
+func (us *UserService) Login(email string, password string) (*string, error) {
+	user, err := us.repo.GetByEmail(email)
+	if err != nil {
+		log.Println(err)
+		return nil, domain.ErrorUserNotFound
+	}
+
+	if user.Password != generatePassword(password) {
+		return nil, domain.ErrorWrongPassword
+	}
+
+	h := sha256.New()
+	h.Write([]byte(fmt.Sprintf("%s%s", "iso@iso.com", "123456")))
+	token := hex.EncodeToString(h.Sum(nil))
+	return &token, nil
+}
+
 func (us *UserService) Register(email string, password string, firstName string, lastName string) error {
 	existed, _ := us.repo.GetByEmail(email)
 	if existed != nil {
@@ -52,7 +76,7 @@ func (us *UserService) Register(email string, password string, firstName string,
 		LastName:   lastName,
 		IsActive:   true,
 		IsVerified: false,
-		Password:   password,
+		Password:   generatePassword(password),
 	})
 	if err != nil {
 		log.Println(err)
@@ -81,4 +105,10 @@ func (us *UserService) Verify(token string) error {
 		return domain.ErrorGeneral
 	}
 	return nil
+}
+
+func generatePassword(password string) string {
+	h := sha256.New()
+	h.Write([]byte(password))
+	return hex.EncodeToString(h.Sum(nil))
 }
