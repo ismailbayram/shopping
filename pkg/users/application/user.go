@@ -14,13 +14,19 @@ type UserRepository interface {
 	All() ([]domain.User, error)
 }
 
-type UserService struct {
-	userRepo UserRepository
+type EmailSender interface {
+	SendWelcomeEmail(string)
 }
 
-func NewUserService(userRepo UserRepository) *UserService {
+type UserService struct {
+	userRepo    UserRepository
+	emailSender EmailSender
+}
+
+func NewUserService(userRepo UserRepository, emailSender EmailSender) *UserService {
 	return &UserService{
-		userRepo: userRepo,
+		userRepo:    userRepo,
+		emailSender: emailSender,
 	}
 }
 
@@ -30,7 +36,7 @@ func (us *UserService) Register(email string, password string, firstName string,
 		return domain.ErrorUserAlreadyExists
 	}
 
-	_, err := us.userRepo.Create(&domain.User{
+	user, err := us.userRepo.Create(&domain.User{
 		Email:      email,
 		FirstName:  firstName,
 		LastName:   lastName,
@@ -42,7 +48,7 @@ func (us *UserService) Register(email string, password string, firstName string,
 		log.Println(err)
 		return err
 	}
-	// TODO: send email
+	go us.emailSender.SendWelcomeEmail(user.Email)
 	return nil
 }
 

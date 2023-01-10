@@ -10,16 +10,19 @@ import (
 
 func TestUserService_Register_Failed(t *testing.T) {
 	mockedUR := &mocks.UserRepository{}
-	US := NewUserService(mockedUR)
+	mockedES := &mocks.EmailSender{}
+	US := NewUserService(mockedUR, mockedES)
 
 	mockedUR.On("GetByEmail", "iso@iso.com").Return(&domain.User{}, nil)
 	err := US.Register("iso@iso.com", "123456", "ismail", "bayram")
 	assert.True(t, errors.Is(err, domain.ErrorUserAlreadyExists))
+	mockedES.AssertNotCalled(t, "SendWelcomeEmail", "iso@iso.com")
 }
 
 func TestUserService_Register_Success(t *testing.T) {
 	mockedUR := &mocks.UserRepository{}
-	US := NewUserService(mockedUR)
+	mockedES := &mocks.EmailSender{}
+	US := NewUserService(mockedUR, mockedES)
 
 	mockedUR.On("GetByEmail", "iso@iso.com").Return(nil, nil)
 	mockedUR.On(
@@ -42,8 +45,10 @@ func TestUserService_Register_Success(t *testing.T) {
 		},
 		nil,
 	)
+	mockedES.On("SendWelcomeEmail", "iso@iso.com")
 	err := US.Register("iso@iso.com", "123456", "ismail", "bayram")
 	assert.Nil(t, err)
+	mockedES.AssertCalled(t, "SendWelcomeEmail", "iso@iso.com")
 }
 
 func TestUserService_GetByID(t *testing.T) {
@@ -53,7 +58,8 @@ func TestUserService_GetByID(t *testing.T) {
 	}
 
 	mockedUR := &mocks.UserRepository{}
-	US := NewUserService(mockedUR)
+	mockedES := &mocks.EmailSender{}
+	US := NewUserService(mockedUR, mockedES)
 
 	mockedUR.On("GetByID", uint(1)).Return(nil, domain.ErrorUserNotFound)
 	userGot, err := US.GetByID(1)
