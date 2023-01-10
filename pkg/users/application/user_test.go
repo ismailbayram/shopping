@@ -6,6 +6,7 @@ import (
 	"github.com/ismailbayram/shopping/test/mocks"
 	"github.com/stretchr/testify/assert"
 	"testing"
+	"time"
 )
 
 func TestUserService_GetByID(t *testing.T) {
@@ -74,6 +75,7 @@ func TestUserService_Register_Success(t *testing.T) {
 	mockedES.On("SendWelcomeEmail", "iso@iso.com")
 	err := US.Register("iso@iso.com", "123456", "ismail", "bayram")
 	assert.Nil(t, err)
+	time.Sleep(1 * time.Millisecond)
 	mockedES.AssertCalled(t, "SendWelcomeEmail", "iso@iso.com")
 }
 
@@ -83,16 +85,16 @@ func TestUserService_Verify_Failed(t *testing.T) {
 	mockedUC := &mocks.UserCache{}
 	US := NewUserService(mockedUR, mockedES, mockedUC)
 
-	mockedUC.On("GetUserIDByVerificationToken", "token").Return(nil)
+	mockedUC.On("GetUserIDByVerificationToken", "token").Return(nil).Once()
 	err := US.Verify("token")
 	assert.Equal(t, domain.ErrorUserNotFound, err)
 
-	//cachedID := uint(1)
-	//mockedUC.On("GetUserIDByVerificationToken", "token").Return(&cachedID)
-	//mockedUR.On("GetByID", uint(1)).Return(nil, errors.New("dummy"))
-	//err = US.Verify("token")
-	//assert.Equal(t, domain.ErrorGeneral, err)
-
+	cachedID := uint(1)
+	mockedUC.On("GetUserIDByVerificationToken", "token").Return(&cachedID)
+	mockedUR.On("GetByID", uint(1)).Return(nil, errors.New("dummy"))
+	err = US.Verify("token")
+	assert.Equal(t, domain.ErrorGeneral, err)
+	mockedUR.AssertNotCalled(t, "Update")
 }
 
 func TestUserService_Verify_Success(t *testing.T) {
