@@ -18,25 +18,35 @@ type EmailSender interface {
 	SendWelcomeEmail(string)
 }
 
-type UserService struct {
-	userRepo    UserRepository
-	emailSender EmailSender
+type UserCache interface {
+	GetUserIDByVerificationToken(string) *uint
 }
 
-func NewUserService(userRepo UserRepository, emailSender EmailSender) *UserService {
+type UserService struct {
+	repo        UserRepository
+	emailSender EmailSender
+	cache       UserCache
+}
+
+func NewUserService(userRepo UserRepository, emailSender EmailSender, cache UserCache) *UserService {
 	return &UserService{
-		userRepo:    userRepo,
+		repo:        userRepo,
 		emailSender: emailSender,
+		cache:       cache,
 	}
 }
 
+func (us *UserService) GetByID(id uint) (*domain.User, error) {
+	return us.repo.GetByID(id)
+}
+
 func (us *UserService) Register(email string, password string, firstName string, lastName string) error {
-	existed, _ := us.userRepo.GetByEmail(email)
+	existed, _ := us.repo.GetByEmail(email)
 	if existed != nil {
 		return domain.ErrorUserAlreadyExists
 	}
 
-	user, err := us.userRepo.Create(&domain.User{
+	user, err := us.repo.Create(&domain.User{
 		Email:      email,
 		FirstName:  firstName,
 		LastName:   lastName,
@@ -52,6 +62,23 @@ func (us *UserService) Register(email string, password string, firstName string,
 	return nil
 }
 
-func (us *UserService) GetByID(id uint) (*domain.User, error) {
-	return us.userRepo.GetByID(id)
+func (us *UserService) Verify(token string) error {
+	userID := us.cache.GetUserIDByVerificationToken(token)
+	if userID == nil {
+		return domain.ErrorUserNotFound
+	}
+
+	user, err := us.repo.GetByID(*userID)
+	if err != nil {
+		log.Println(err)
+		return domain.ErrorGeneral
+	}
+
+	user.IsVerified = true
+	err = us.repo.Update(user)
+	if err != nil {
+		log.Println(err)
+		return domain.ErrorGeneral
+	}
+	return nil
 }
