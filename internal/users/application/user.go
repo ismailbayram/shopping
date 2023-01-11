@@ -4,7 +4,7 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 	"fmt"
-	domain "github.com/ismailbayram/shopping/pkg/users/domain/models"
+	domain "github.com/ismailbayram/shopping/internal/users/domain/models"
 	"log"
 )
 

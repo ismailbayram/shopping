@@ -5,7 +5,7 @@ import (
 	"encoding/hex"
 	"errors"
 	"fmt"
-	domain "github.com/ismailbayram/shopping/pkg/users/domain/models"
+	domain "github.com/ismailbayram/shopping/internal/users/domain/models"
 	"github.com/ismailbayram/shopping/test/mocks"
 	"github.com/stretchr/testify/assert"
 	"testing"

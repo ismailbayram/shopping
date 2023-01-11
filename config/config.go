@@ -40,14 +40,14 @@ func getDefaultConfig() *Configuration {
 	return &Configuration{
 		SecretKey: "TOP_SECRET",
 		Database: DatabaseConfiguration{
-			Name:     "todos",
+			Name:     "shopping",
 			Username: "postgres",
 			Password: "123456",
 			Host:     "localhost",
 			Port:     "5432",
 		},
 		Server: ServerConfiguration{
-			Port:    "8000",
+			Port:    "8080",
 			Timeout: 10,
 		},
 	}
