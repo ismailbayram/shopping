@@ -1,14 +1,24 @@
 package api
 
 import (
-	"net/http"
-
 	"github.com/gin-gonic/gin"
+	"github.com/ismailbayram/shopping/internal/users"
+	"net/http"
 )
 
-func NewRouter() *gin.Engine {
+type App struct {
+	Users users.Users
+}
+
+func NewRouter(app *App) *gin.Engine {
+	//f, _ := os.Create("shopping.log")
+	//gin.DefaultWriter = io.MultiWriter(f)
+	//	r.Use(gin.Recovery())
+
 	r := gin.Default()
-	r.GET("/ping", func(c *gin.Context) {
+	api := r.Group("/api")
+
+	api.GET("/login", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{
 			"message": "pong",
 		})
