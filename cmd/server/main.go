@@ -3,9 +3,9 @@ package main
 import (
 	"fmt"
 	"github.com/ismailbayram/shopping/config"
-	"github.com/ismailbayram/shopping/internal/database"
 	"github.com/ismailbayram/shopping/internal/users"
 	"github.com/ismailbayram/shopping/pkg/api"
+	"github.com/ismailbayram/shopping/pkg/database"
 	"log"
 	"net/http"
 	"time"
