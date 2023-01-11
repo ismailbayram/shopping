@@ -1,3 +1,2 @@
 # TODOS
-- config
 - products
