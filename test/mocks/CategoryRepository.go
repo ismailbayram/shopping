@@ -3,7 +3,7 @@
 package mocks
 
 import (
-	models "github.com/ismailbayram/shopping/internal/products/domain/models"
+	domain "github.com/ismailbayram/shopping/internal/products/domain/models"
 	mock "github.com/stretchr/testify/mock"
 )
 
@@ -13,15 +13,15 @@ type CategoryRepository struct {
 }
 
 // All provides a mock function with given fields:
-func (_m *CategoryRepository) All() ([]models.Category, error) {
+func (_m *CategoryRepository) All() ([]domain.Category, error) {
 	ret := _m.Called()
 
-	var r0 []models.Category
-	if rf, ok := ret.Get(0).(func() []models.Category); ok {
+	var r0 []domain.Category
+	if rf, ok := ret.Get(0).(func() []domain.Category); ok {
 		r0 = rf()
 	} else {
 		if ret.Get(0) != nil {
-			r0 = ret.Get(0).([]models.Category)
+			r0 = ret.Get(0).([]domain.Category)
 		}
 	}
 
@@ -36,20 +36,20 @@ func (_m *CategoryRepository) All() ([]models.Category, error) {
 }
 
 // Create provides a mock function with given fields: _a0
-func (_m *CategoryRepository) Create(_a0 *models.Category) (*models.Category, error) {
+func (_m *CategoryRepository) Create(_a0 *domain.Category) (*domain.Category, error) {
 	ret := _m.Called(_a0)
 
-	var r0 *models.Category
-	if rf, ok := ret.Get(0).(func(*models.Category) *models.Category); ok {
+	var r0 *domain.Category
+	if rf, ok := ret.Get(0).(func(*domain.Category) *domain.Category); ok {
 		r0 = rf(_a0)
 	} else {
 		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*models.Category)
+			r0 = ret.Get(0).(*domain.Category)
 		}
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(*models.Category) error); ok {
+	if rf, ok := ret.Get(1).(func(*domain.Category) error); ok {
 		r1 = rf(_a0)
 	} else {
 		r1 = ret.Error(1)
@@ -59,15 +59,15 @@ func (_m *CategoryRepository) Create(_a0 *models.Category) (*models.Category, er
 }
 
 // GetByID provides a mock function with given fields: _a0
-func (_m *CategoryRepository) GetByID(_a0 uint) (*models.Category, error) {
+func (_m *CategoryRepository) GetByID(_a0 uint) (*domain.Category, error) {
 	ret := _m.Called(_a0)
 
-	var r0 *models.Category
-	if rf, ok := ret.Get(0).(func(uint) *models.Category); ok {
+	var r0 *domain.Category
+	if rf, ok := ret.Get(0).(func(uint) *domain.Category); ok {
 		r0 = rf(_a0)
 	} else {
 		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*models.Category)
+			r0 = ret.Get(0).(*domain.Category)
 		}
 	}
 
@@ -82,11 +82,11 @@ func (_m *CategoryRepository) GetByID(_a0 uint) (*models.Category, error) {
 }
 
 // Update provides a mock function with given fields: _a0
-func (_m *CategoryRepository) Update(_a0 *models.Category) error {
+func (_m *CategoryRepository) Update(_a0 *domain.Category) error {
 	ret := _m.Called(_a0)
 
 	var r0 error
-	if rf, ok := ret.Get(0).(func(*models.Category) error); ok {
+	if rf, ok := ret.Get(0).(func(*domain.Category) error); ok {
 		r0 = rf(_a0)
 	} else {
 		r0 = ret.Error(0)

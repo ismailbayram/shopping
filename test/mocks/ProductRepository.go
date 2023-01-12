@@ -3,7 +3,7 @@
 package mocks
 
 import (
-	models "github.com/ismailbayram/shopping/internal/products/domain/models"
+	domain "github.com/ismailbayram/shopping/internal/products/domain/models"
 	mock "github.com/stretchr/testify/mock"
 )
 
@@ -13,15 +13,15 @@ type ProductRepository struct {
 }
 
 // All provides a mock function with given fields:
-func (_m *ProductRepository) All() ([]models.Product, error) {
+func (_m *ProductRepository) All() ([]domain.Product, error) {
 	ret := _m.Called()
 
-	var r0 []models.Product
-	if rf, ok := ret.Get(0).(func() []models.Product); ok {
+	var r0 []domain.Product
+	if rf, ok := ret.Get(0).(func() []domain.Product); ok {
 		r0 = rf()
 	} else {
 		if ret.Get(0) != nil {
-			r0 = ret.Get(0).([]models.Product)
+			r0 = ret.Get(0).([]domain.Product)
 		}
 	}
 
@@ -36,20 +36,20 @@ func (_m *ProductRepository) All() ([]models.Product, error) {
 }
 
 // Create provides a mock function with given fields: _a0
-func (_m *ProductRepository) Create(_a0 *models.Product) (*models.Product, error) {
+func (_m *ProductRepository) Create(_a0 *domain.Product) (*domain.Product, error) {
 	ret := _m.Called(_a0)
 
-	var r0 *models.Product
-	if rf, ok := ret.Get(0).(func(*models.Product) *models.Product); ok {
+	var r0 *domain.Product
+	if rf, ok := ret.Get(0).(func(*domain.Product) *domain.Product); ok {
 		r0 = rf(_a0)
 	} else {
 		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*models.Product)
+			r0 = ret.Get(0).(*domain.Product)
 		}
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(*models.Product) error); ok {
+	if rf, ok := ret.Get(1).(func(*domain.Product) error); ok {
 		r1 = rf(_a0)
 	} else {
 		r1 = ret.Error(1)
@@ -59,20 +59,20 @@ func (_m *ProductRepository) Create(_a0 *models.Product) (*models.Product, error
 }
 
 // GetByCategory provides a mock function with given fields: category
-func (_m *ProductRepository) GetByCategory(category models.Category) ([]models.Product, error) {
+func (_m *ProductRepository) GetByCategory(category domain.Category) ([]domain.Product, error) {
 	ret := _m.Called(category)
 
-	var r0 []models.Product
-	if rf, ok := ret.Get(0).(func(models.Category) []models.Product); ok {
+	var r0 []domain.Product
+	if rf, ok := ret.Get(0).(func(domain.Category) []domain.Product); ok {
 		r0 = rf(category)
 	} else {
 		if ret.Get(0) != nil {
-			r0 = ret.Get(0).([]models.Product)
+			r0 = ret.Get(0).([]domain.Product)
 		}
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(models.Category) error); ok {
+	if rf, ok := ret.Get(1).(func(domain.Category) error); ok {
 		r1 = rf(category)
 	} else {
 		r1 = ret.Error(1)
@@ -82,15 +82,15 @@ func (_m *ProductRepository) GetByCategory(category models.Category) ([]models.P
 }
 
 // GetByID provides a mock function with given fields: _a0
-func (_m *ProductRepository) GetByID(_a0 uint) (*models.Product, error) {
+func (_m *ProductRepository) GetByID(_a0 uint) (*domain.Product, error) {
 	ret := _m.Called(_a0)
 
-	var r0 *models.Product
-	if rf, ok := ret.Get(0).(func(uint) *models.Product); ok {
+	var r0 *domain.Product
+	if rf, ok := ret.Get(0).(func(uint) *domain.Product); ok {
 		r0 = rf(_a0)
 	} else {
 		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*models.Product)
+			r0 = ret.Get(0).(*domain.Product)
 		}
 	}
 
@@ -105,11 +105,11 @@ func (_m *ProductRepository) GetByID(_a0 uint) (*models.Product, error) {
 }
 
 // Update provides a mock function with given fields: _a0
-func (_m *ProductRepository) Update(_a0 *models.Product) error {
+func (_m *ProductRepository) Update(_a0 *domain.Product) error {
 	ret := _m.Called(_a0)
 
 	var r0 error
-	if rf, ok := ret.Get(0).(func(*models.Product) error); ok {
+	if rf, ok := ret.Get(0).(func(*domain.Product) error); ok {
 		r0 = rf(_a0)
 	} else {
 		r0 = ret.Error(0)
