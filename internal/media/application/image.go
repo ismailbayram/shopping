@@ -8,7 +8,7 @@ type ImageRepository interface {
 }
 
 type ImageStorage interface {
-	Upload([]byte) (string, error)
+	Upload(string, []byte) (string, error)
 }
 
 type ImageService struct {
@@ -27,8 +27,8 @@ func (is *ImageService) GetByID(id uint) (domain.Image, error) {
 	return is.repo.GetByID(id)
 }
 
-func (is *ImageService) Create(content []byte) (domain.Image, error) {
-	path, err := is.storage.Upload(content)
+func (is *ImageService) Create(name string, content []byte) (domain.Image, error) {
+	path, err := is.storage.Upload(name, content)
 	if err != nil {
 		return domain.Image{}, domain.ErrorGeneral
 	}

@@ -9,20 +9,20 @@ type ImageStorage struct {
 	mock.Mock
 }
 
-// Upload provides a mock function with given fields: _a0
-func (_m *ImageStorage) Upload(_a0 []byte) (string, error) {
-	ret := _m.Called(_a0)
+// Upload provides a mock function with given fields: _a0, _a1
+func (_m *ImageStorage) Upload(_a0 string, _a1 []byte) (string, error) {
+	ret := _m.Called(_a0, _a1)
 
 	var r0 string
-	if rf, ok := ret.Get(0).(func([]byte) string); ok {
-		r0 = rf(_a0)
+	if rf, ok := ret.Get(0).(func(string, []byte) string); ok {
+		r0 = rf(_a0, _a1)
 	} else {
 		r0 = ret.Get(0).(string)
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func([]byte) error); ok {
-		r1 = rf(_a0)
+	if rf, ok := ret.Get(1).(func(string, []byte) error); ok {
+		r1 = rf(_a0, _a1)
 	} else {
 		r1 = ret.Error(1)
 	}

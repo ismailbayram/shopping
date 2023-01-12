@@ -9,6 +9,7 @@ type Configuration struct {
 	SecretKey string
 	Database  DatabaseConfiguration
 	Server    ServerConfiguration
+	Storage   StorageConfiguration
 }
 
 type ServerConfiguration struct {
@@ -22,6 +23,10 @@ type DatabaseConfiguration struct {
 	Password string
 	Host     string
 	Port     string
+}
+
+type StorageConfiguration struct {
+	MediaRoot string
 }
 
 func Init() *Configuration {
@@ -49,6 +54,9 @@ func getDefaultConfig() *Configuration {
 		Server: ServerConfiguration{
 			Port:    "8080",
 			Timeout: 10,
+		},
+		Storage: StorageConfiguration{
+			MediaRoot: "media",
 		},
 	}
 }

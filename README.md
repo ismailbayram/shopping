@@ -4,3 +4,4 @@
 - sentry
 - dockerize
 - githubactions
+- https://github.com/golangci/golangci-lint

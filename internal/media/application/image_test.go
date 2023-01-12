@@ -35,14 +35,14 @@ func TestImageService_Create(t *testing.T) {
 	mockedIS := &mocks.ImageStorage{}
 	IS := NewImageService(mockedIR, mockedIS)
 
-	mockedIS.On("Upload", []byte("file content")).Return("", errors.New("dump")).Once()
-	image, err := IS.Create([]byte("file content"))
+	mockedIS.On("Upload", "image.png", []byte("file content")).Return("", errors.New("dump")).Once()
+	image, err := IS.Create("image.png", []byte("file content"))
 	assert.Equal(t, uint(0), image.ID)
 	assert.Equal(t, domain.ErrorGeneral, err)
 
-	mockedIS.On("Upload", []byte("file content")).Return("images/image.png", nil).Once()
+	mockedIS.On("Upload", "image.png", []byte("file content")).Return("images/image.png", nil).Once()
 	mockedIR.On("Create", domain.Image{Path: "images/image.png"}).Return(domain.Image{ID: 1, Path: "images/image.png"}, nil)
-	image, err = IS.Create([]byte("file content"))
+	image, err = IS.Create("image.png", []byte("file content"))
 	assert.Nil(t, err)
 	assert.Equal(t, uint(1), image.ID)
 	assert.Equal(t, "images/image.png", image.Path)
