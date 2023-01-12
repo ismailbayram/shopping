@@ -1,5 +1,11 @@
 package models
 
+import "errors"
+
+var (
+	ErrorCategoryNotFound = errors.New("Category not found.")
+)
+
 type Category struct {
 	ID       uint
 	Name     string
