@@ -1,6 +1,9 @@
 package domain
 
-import "errors"
+import (
+	"errors"
+	"fmt"
+)
 
 var (
 	ErrorGeneral       = errors.New("Something went wrong, please try again.")
@@ -10,4 +13,8 @@ var (
 type Image struct {
 	ID   uint
 	Path string
+}
+
+func (i *Image) Url(baseUrl string) string {
+	return fmt.Sprintf("%s/%s", baseUrl, i.Path)
 }
