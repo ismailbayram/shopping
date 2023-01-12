@@ -36,20 +36,18 @@ func (_m *ProductRepository) All() ([]domain.Product, error) {
 }
 
 // Create provides a mock function with given fields: _a0
-func (_m *ProductRepository) Create(_a0 *domain.Product) (*domain.Product, error) {
+func (_m *ProductRepository) Create(_a0 domain.Product) (domain.Product, error) {
 	ret := _m.Called(_a0)
 
-	var r0 *domain.Product
-	if rf, ok := ret.Get(0).(func(*domain.Product) *domain.Product); ok {
+	var r0 domain.Product
+	if rf, ok := ret.Get(0).(func(domain.Product) domain.Product); ok {
 		r0 = rf(_a0)
 	} else {
-		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*domain.Product)
-		}
+		r0 = ret.Get(0).(domain.Product)
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(*domain.Product) error); ok {
+	if rf, ok := ret.Get(1).(func(domain.Product) error); ok {
 		r1 = rf(_a0)
 	} else {
 		r1 = ret.Error(1)
@@ -82,16 +80,14 @@ func (_m *ProductRepository) GetByCategory(category domain.Category) ([]domain.P
 }
 
 // GetByID provides a mock function with given fields: _a0
-func (_m *ProductRepository) GetByID(_a0 uint) (*domain.Product, error) {
+func (_m *ProductRepository) GetByID(_a0 uint) (domain.Product, error) {
 	ret := _m.Called(_a0)
 
-	var r0 *domain.Product
-	if rf, ok := ret.Get(0).(func(uint) *domain.Product); ok {
+	var r0 domain.Product
+	if rf, ok := ret.Get(0).(func(uint) domain.Product); ok {
 		r0 = rf(_a0)
 	} else {
-		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*domain.Product)
-		}
+		r0 = ret.Get(0).(domain.Product)
 	}
 
 	var r1 error
@@ -105,11 +101,11 @@ func (_m *ProductRepository) GetByID(_a0 uint) (*domain.Product, error) {
 }
 
 // Update provides a mock function with given fields: _a0
-func (_m *ProductRepository) Update(_a0 *domain.Product) error {
+func (_m *ProductRepository) Update(_a0 domain.Product) error {
 	ret := _m.Called(_a0)
 
 	var r0 error
-	if rf, ok := ret.Get(0).(func(*domain.Product) error); ok {
+	if rf, ok := ret.Get(0).(func(domain.Product) error); ok {
 		r0 = rf(_a0)
 	} else {
 		r0 = ret.Error(0)

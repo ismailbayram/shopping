@@ -13,20 +13,18 @@ type ImageRepository struct {
 }
 
 // Create provides a mock function with given fields: _a0
-func (_m *ImageRepository) Create(_a0 *domain.Image) (*domain.Image, error) {
+func (_m *ImageRepository) Create(_a0 domain.Image) (domain.Image, error) {
 	ret := _m.Called(_a0)
 
-	var r0 *domain.Image
-	if rf, ok := ret.Get(0).(func(*domain.Image) *domain.Image); ok {
+	var r0 domain.Image
+	if rf, ok := ret.Get(0).(func(domain.Image) domain.Image); ok {
 		r0 = rf(_a0)
 	} else {
-		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*domain.Image)
-		}
+		r0 = ret.Get(0).(domain.Image)
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(*domain.Image) error); ok {
+	if rf, ok := ret.Get(1).(func(domain.Image) error); ok {
 		r1 = rf(_a0)
 	} else {
 		r1 = ret.Error(1)
@@ -36,16 +34,14 @@ func (_m *ImageRepository) Create(_a0 *domain.Image) (*domain.Image, error) {
 }
 
 // GetByID provides a mock function with given fields: _a0
-func (_m *ImageRepository) GetByID(_a0 uint) (*domain.Image, error) {
+func (_m *ImageRepository) GetByID(_a0 uint) (domain.Image, error) {
 	ret := _m.Called(_a0)
 
-	var r0 *domain.Image
-	if rf, ok := ret.Get(0).(func(uint) *domain.Image); ok {
+	var r0 domain.Image
+	if rf, ok := ret.Get(0).(func(uint) domain.Image); ok {
 		r0 = rf(_a0)
 	} else {
-		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*domain.Image)
-		}
+		r0 = ret.Get(0).(domain.Image)
 	}
 
 	var r1 error

@@ -9,11 +9,11 @@ import (
 )
 
 type UserRepository interface {
-	Create(*domain.User) (*domain.User, error)
-	Update(*domain.User) error
-	GetByID(uint) (*domain.User, error)
-	GetByEmail(string) (*domain.User, error)
-	GetByToken(string) (*domain.User, error)
+	Create(domain.User) (domain.User, error)
+	Update(domain.User) error
+	GetByID(uint) (domain.User, error)
+	GetByEmail(string) (domain.User, error)
+	GetByToken(string) (domain.User, error)
 	All() ([]domain.User, error)
 }
 
@@ -22,7 +22,7 @@ type EmailSender interface {
 }
 
 type UserCache interface {
-	GetUserIDByVerificationToken(string) *uint
+	GetUserIDByVerificationToken(string) uint
 }
 
 type UserService struct {
@@ -39,11 +39,11 @@ func NewUserService(userRepo UserRepository, emailSender EmailSender, cache User
 	}
 }
 
-func (us *UserService) GetByID(id uint) (*domain.User, error) {
+func (us *UserService) GetByID(id uint) (domain.User, error) {
 	return us.repo.GetByID(id)
 }
 
-func (us *UserService) GetByToken(token string) (*domain.User, error) {
+func (us *UserService) GetByToken(token string) (domain.User, error) {
 	return us.repo.GetByToken(token)
 }
 
@@ -66,11 +66,11 @@ func (us *UserService) Login(email string, password string) (*string, error) {
 
 func (us *UserService) Register(email string, password string, firstName string, lastName string) error {
 	existed, _ := us.repo.GetByEmail(email)
-	if existed != nil {
+	if existed.ID != uint(0) {
 		return domain.ErrorUserAlreadyExists
 	}
 
-	user, err := us.repo.Create(&domain.User{
+	user, err := us.repo.Create(domain.User{
 		Email:      email,
 		FirstName:  firstName,
 		LastName:   lastName,
@@ -88,11 +88,11 @@ func (us *UserService) Register(email string, password string, firstName string,
 
 func (us *UserService) Verify(token string) error {
 	userID := us.cache.GetUserIDByVerificationToken(token)
-	if userID == nil {
+	if userID == uint(0) {
 		return domain.ErrorUserNotFound
 	}
 
-	user, err := us.repo.GetByID(*userID)
+	user, err := us.repo.GetByID(userID)
 	if err != nil {
 		log.Println(err)
 		return domain.ErrorGeneral

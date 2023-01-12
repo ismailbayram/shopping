@@ -8,7 +8,7 @@ import (
 )
 
 func TestCategoryService_GetByID(t *testing.T) {
-	category := &domain.Category{
+	category := domain.Category{
 		ID:   2,
 		Name: "test",
 	}
@@ -17,14 +17,14 @@ func TestCategoryService_GetByID(t *testing.T) {
 	mockedPR := &mocks.ProductRepository{}
 	PS := NewCategoryService(mockedCR, mockedPR)
 
-	mockedCR.On("GetByID", uint(1)).Return(nil, domain.ErrorCategoryNotFound)
+	mockedCR.On("GetByID", uint(1)).Return(domain.Category{}, domain.ErrorCategoryNotFound)
 	categoryGot, err := PS.GetByID(1)
-	assert.Nil(t, categoryGot)
+	assert.Equal(t, uint(0), categoryGot.ID)
 	assert.NotNil(t, err)
 
 	mockedCR.On("GetByID", uint(2)).Return(category, nil)
 	categoryGot, err = PS.GetByID(2)
-	assert.NotNil(t, categoryGot)
+	assert.NotEqual(t, uint(0), categoryGot)
 	assert.Nil(t, err)
 	assert.Equal(t, category.ID, categoryGot.ID)
 }

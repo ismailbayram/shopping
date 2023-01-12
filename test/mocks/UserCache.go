@@ -10,16 +10,14 @@ type UserCache struct {
 }
 
 // GetUserIDByVerificationToken provides a mock function with given fields: _a0
-func (_m *UserCache) GetUserIDByVerificationToken(_a0 string) *uint {
+func (_m *UserCache) GetUserIDByVerificationToken(_a0 string) uint {
 	ret := _m.Called(_a0)
 
-	var r0 *uint
-	if rf, ok := ret.Get(0).(func(string) *uint); ok {
+	var r0 uint
+	if rf, ok := ret.Get(0).(func(string) uint); ok {
 		r0 = rf(_a0)
 	} else {
-		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*uint)
-		}
+		r0 = ret.Get(0).(uint)
 	}
 
 	return r0

@@ -36,20 +36,18 @@ func (_m *UserRepository) All() ([]domain.User, error) {
 }
 
 // Create provides a mock function with given fields: _a0
-func (_m *UserRepository) Create(_a0 *domain.User) (*domain.User, error) {
+func (_m *UserRepository) Create(_a0 domain.User) (domain.User, error) {
 	ret := _m.Called(_a0)
 
-	var r0 *domain.User
-	if rf, ok := ret.Get(0).(func(*domain.User) *domain.User); ok {
+	var r0 domain.User
+	if rf, ok := ret.Get(0).(func(domain.User) domain.User); ok {
 		r0 = rf(_a0)
 	} else {
-		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*domain.User)
-		}
+		r0 = ret.Get(0).(domain.User)
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(*domain.User) error); ok {
+	if rf, ok := ret.Get(1).(func(domain.User) error); ok {
 		r1 = rf(_a0)
 	} else {
 		r1 = ret.Error(1)
@@ -59,16 +57,14 @@ func (_m *UserRepository) Create(_a0 *domain.User) (*domain.User, error) {
 }
 
 // GetByEmail provides a mock function with given fields: _a0
-func (_m *UserRepository) GetByEmail(_a0 string) (*domain.User, error) {
+func (_m *UserRepository) GetByEmail(_a0 string) (domain.User, error) {
 	ret := _m.Called(_a0)
 
-	var r0 *domain.User
-	if rf, ok := ret.Get(0).(func(string) *domain.User); ok {
+	var r0 domain.User
+	if rf, ok := ret.Get(0).(func(string) domain.User); ok {
 		r0 = rf(_a0)
 	} else {
-		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*domain.User)
-		}
+		r0 = ret.Get(0).(domain.User)
 	}
 
 	var r1 error
@@ -82,16 +78,14 @@ func (_m *UserRepository) GetByEmail(_a0 string) (*domain.User, error) {
 }
 
 // GetByID provides a mock function with given fields: _a0
-func (_m *UserRepository) GetByID(_a0 uint) (*domain.User, error) {
+func (_m *UserRepository) GetByID(_a0 uint) (domain.User, error) {
 	ret := _m.Called(_a0)
 
-	var r0 *domain.User
-	if rf, ok := ret.Get(0).(func(uint) *domain.User); ok {
+	var r0 domain.User
+	if rf, ok := ret.Get(0).(func(uint) domain.User); ok {
 		r0 = rf(_a0)
 	} else {
-		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*domain.User)
-		}
+		r0 = ret.Get(0).(domain.User)
 	}
 
 	var r1 error
@@ -105,16 +99,14 @@ func (_m *UserRepository) GetByID(_a0 uint) (*domain.User, error) {
 }
 
 // GetByToken provides a mock function with given fields: _a0
-func (_m *UserRepository) GetByToken(_a0 string) (*domain.User, error) {
+func (_m *UserRepository) GetByToken(_a0 string) (domain.User, error) {
 	ret := _m.Called(_a0)
 
-	var r0 *domain.User
-	if rf, ok := ret.Get(0).(func(string) *domain.User); ok {
+	var r0 domain.User
+	if rf, ok := ret.Get(0).(func(string) domain.User); ok {
 		r0 = rf(_a0)
 	} else {
-		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*domain.User)
-		}
+		r0 = ret.Get(0).(domain.User)
 	}
 
 	var r1 error
@@ -128,11 +120,11 @@ func (_m *UserRepository) GetByToken(_a0 string) (*domain.User, error) {
 }
 
 // Update provides a mock function with given fields: _a0
-func (_m *UserRepository) Update(_a0 *domain.User) error {
+func (_m *UserRepository) Update(_a0 domain.User) error {
 	ret := _m.Called(_a0)
 
 	var r0 error
-	if rf, ok := ret.Get(0).(func(*domain.User) error); ok {
+	if rf, ok := ret.Get(0).(func(domain.User) error); ok {
 		r0 = rf(_a0)
 	} else {
 		r0 = ret.Error(0)

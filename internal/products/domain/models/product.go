@@ -12,7 +12,7 @@ type Product struct {
 	Name     string
 	Stock    uint
 	Price    float32
-	Category *Category
+	Category Category
 }
 
 func (p *Product) IsAvailable() bool {

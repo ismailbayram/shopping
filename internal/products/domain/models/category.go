@@ -9,7 +9,7 @@ var (
 type Category struct {
 	ID       uint
 	Name     string
-	Products []*Product
+	Products []Product
 }
 
 func (c *Category) IsEmpty() bool {
