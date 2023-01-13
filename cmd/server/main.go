@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/ismailbayram/shopping/config"
+	"github.com/ismailbayram/shopping/internal/media"
 	"github.com/ismailbayram/shopping/internal/users"
 	"github.com/ismailbayram/shopping/pkg/api"
 	"github.com/ismailbayram/shopping/pkg/database"
@@ -18,6 +19,7 @@ func main() {
 
 	app := &api.App{
 		Users: users.New(db.Conn),
+		Media: media.New(db.Conn, cfg.Storage.MediaRoot),
 	}
 
 	s := &http.Server{

@@ -31,7 +31,7 @@ func NewFileStorage(mediaRoot string) FileStorage {
 	}
 }
 
-func (ifs *FileStorage) Upload(name string, content []byte) (string, error) {
+func (ifs FileStorage) Upload(name string, content []byte) (string, error) {
 	fileName := generateFileName(name)
 	path := filepath.Join(ifs.baseDir, fileName)
 

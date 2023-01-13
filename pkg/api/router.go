@@ -2,12 +2,14 @@ package api
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/ismailbayram/shopping/internal/media"
 	"github.com/ismailbayram/shopping/internal/users"
 	"net/http"
 )
 
 type App struct {
 	Users users.Users
+	Media media.Media
 }
 
 func NewRouter(app *App) *gin.Engine {
