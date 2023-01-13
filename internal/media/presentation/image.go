@@ -60,8 +60,7 @@ func ImageCreateView(app *application.Application) gin.HandlerFunc {
 			return
 		}
 
-		ctx.SaveUploadedFile(formFile, "a")
-		content := make([]byte, 1)
+		content := make([]byte, formFile.Size)
 		_, err = file.Read(content)
 		if err != nil {
 			log.Println(err)

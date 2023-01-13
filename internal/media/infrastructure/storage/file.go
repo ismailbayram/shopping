@@ -36,6 +36,7 @@ func (ifs FileStorage) Upload(name string, content []byte) (string, error) {
 	path := filepath.Join(ifs.baseDir, fileName)
 
 	file, err := os.Create(path)
+	defer file.Close()
 	if err != nil {
 		return "", err
 	}
