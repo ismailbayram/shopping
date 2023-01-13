@@ -13,8 +13,10 @@ type Configuration struct {
 }
 
 type ServerConfiguration struct {
-	Port    string
-	Timeout uint
+	Domain   string
+	Port     string
+	Timeout  uint
+	MediaUrl string
 }
 
 type DatabaseConfiguration struct {
@@ -52,8 +54,10 @@ func getDefaultConfig() *Configuration {
 			Port:     "5432",
 		},
 		Server: ServerConfiguration{
-			Port:    "8080",
-			Timeout: 10,
+			Domain:   "http://localhost:8080",
+			Port:     "8080",
+			Timeout:  10,
+			MediaUrl: "/media",
 		},
 		Storage: StorageConfiguration{
 			MediaRoot: "media",

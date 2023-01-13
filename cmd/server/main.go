@@ -19,8 +19,10 @@ func main() {
 	db := database.New(&cfg.Database)
 
 	app := &application.Application{
-		Users: users.New(db.Conn),
-		Media: media.New(db.Conn, cfg.Storage.MediaRoot),
+		SiteUrl:  cfg.Server.Domain,
+		MediaUrl: cfg.Server.MediaUrl,
+		Users:    users.New(db.Conn),
+		Media:    media.New(db.Conn, cfg.Storage.MediaRoot),
 	}
 
 	s := &http.Server{
@@ -30,7 +32,7 @@ func main() {
 		WriteTimeout:   time.Duration(cfg.Server.Timeout) * time.Second,
 		MaxHeaderBytes: 1 << 20,
 	}
-	fmt.Println(fmt.Sprintf("Listening On http://127.0.0.1:%s", cfg.Server.Port))
+	fmt.Println(fmt.Sprintf("Listening On http://localhost:%s", cfg.Server.Port))
 	err := s.ListenAndServe()
 	if err != nil {
 		log.Fatalln(err)

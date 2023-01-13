@@ -38,21 +38,21 @@ func (idr ImageDBRepository) Create(image domain.Image) (domain.Image, error) {
 	}
 
 	return domain.Image{
-		ID:   image.ID,
-		Path: image.Path,
+		ID:   imageDB.ID,
+		Path: imageDB.Path,
 	}, nil
 }
 
 func (idr ImageDBRepository) GetByID(id uint) (domain.Image, error) {
-	var image ImageDB
-	result := idr.db.Where("id = ?", id).First(&image)
+	var imageDB ImageDB
+	result := idr.db.Where("id = ?", id).First(&imageDB)
 
 	if result.Error != nil {
 		return domain.Image{}, domain.ErrorImageNotFound
 	}
 
 	return domain.Image{
-		ID:   image.ID,
-		Path: image.Path,
+		ID:   imageDB.ID,
+		Path: imageDB.Path,
 	}, nil
 }

@@ -13,13 +13,17 @@ func NewRouter(app *application.Application) *gin.Engine {
 	//	r.Use(gin.Recovery())
 
 	r := gin.Default()
-	api := r.Group("/api")
 
+	r.StaticFS(app.MediaUrl, http.Dir("media"))
+
+	api := r.Group("/api")
 	api.GET("/login", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{
 			"message": "pong",
 		})
 	})
 	api.GET("/images/:imageId", media.ImageDetailView(app))
+	api.POST("/images", media.ImageCreateView(app))
+
 	return r
 }
