@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/ismailbayram/shopping/config"
+	"github.com/ismailbayram/shopping/internal/application"
 	"github.com/ismailbayram/shopping/internal/media"
 	"github.com/ismailbayram/shopping/internal/users"
 	"github.com/ismailbayram/shopping/pkg/api"
@@ -17,7 +18,7 @@ func main() {
 
 	db := database.New(&cfg.Database)
 
-	app := &api.App{
+	app := &application.Application{
 		Users: users.New(db.Conn),
 		Media: media.New(db.Conn, cfg.Storage.MediaRoot),
 	}
@@ -29,6 +30,7 @@ func main() {
 		WriteTimeout:   time.Duration(cfg.Server.Timeout) * time.Second,
 		MaxHeaderBytes: 1 << 20,
 	}
+	fmt.Println(fmt.Sprintf("Listening On http://127.0.0.1:%s", cfg.Server.Port))
 	err := s.ListenAndServe()
 	if err != nil {
 		log.Fatalln(err)

@@ -2,17 +2,12 @@ package api
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/ismailbayram/shopping/internal/media"
-	"github.com/ismailbayram/shopping/internal/users"
+	"github.com/ismailbayram/shopping/internal/application"
+	mediaPresentation "github.com/ismailbayram/shopping/internal/media/presentation"
 	"net/http"
 )
 
-type App struct {
-	Users users.Users
-	Media media.Media
-}
-
-func NewRouter(app *App) *gin.Engine {
+func NewRouter(app *application.Application) *gin.Engine {
 	//f, _ := os.Create("shopping.log")
 	//gin.DefaultWriter = io.MultiWriter(f)
 	//	r.Use(gin.Recovery())
@@ -25,5 +20,6 @@ func NewRouter(app *App) *gin.Engine {
 			"message": "pong",
 		})
 	})
+	api.GET("/images/:imageId", mediaPresentation.ImageDetailView(app))
 	return r
 }

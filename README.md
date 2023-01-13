@@ -1,6 +1,6 @@
 # TODOS
 - products api & db implementation
-- media app
+- media app views
 - sentry
 - dockerize
 - githubactions
