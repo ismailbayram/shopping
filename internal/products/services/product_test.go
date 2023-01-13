@@ -1,4 +1,4 @@
-package application
+package services
 
 import (
 	domain "github.com/ismailbayram/shopping/internal/products/domain/models"

@@ -1,19 +1,19 @@
 package media
 
 import (
-	"github.com/ismailbayram/shopping/internal/media/application"
 	dbInfrastructure "github.com/ismailbayram/shopping/internal/media/infrastructure/db"
 	fileInfrastructure "github.com/ismailbayram/shopping/internal/media/infrastructure/storage"
+	"github.com/ismailbayram/shopping/internal/media/services"
 	"gorm.io/gorm"
 )
 
 type Media struct {
-	Service *application.ImageService
+	Service *services.ImageService
 }
 
 func New(db *gorm.DB, mediaRoot string) Media {
 	return Media{
-		Service: application.NewImageService(
+		Service: services.NewImageService(
 			dbInfrastructure.NewImageDBRepository(db),
 			fileInfrastructure.NewFileStorage(mediaRoot),
 		),

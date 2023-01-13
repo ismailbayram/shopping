@@ -3,7 +3,7 @@ package api
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/ismailbayram/shopping/internal/application"
-	mediaPresentation "github.com/ismailbayram/shopping/internal/media/presentation"
+	media "github.com/ismailbayram/shopping/internal/media/presentation"
 	"net/http"
 )
 
@@ -20,6 +20,6 @@ func NewRouter(app *application.Application) *gin.Engine {
 			"message": "pong",
 		})
 	})
-	api.GET("/images/:imageId", mediaPresentation.ImageDetailView(app))
+	api.GET("/images/:imageId", media.ImageDetailView(app))
 	return r
 }

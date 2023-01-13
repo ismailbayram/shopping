@@ -1,18 +1,18 @@
 package users
 
 import (
-	"github.com/ismailbayram/shopping/internal/users/application"
 	infrastructure "github.com/ismailbayram/shopping/internal/users/infrastructure/db"
+	"github.com/ismailbayram/shopping/internal/users/services"
 	"gorm.io/gorm"
 )
 
 type Users struct {
-	Service *application.UserService
+	Service *services.UserService
 }
 
 func New(db *gorm.DB) Users {
 	return Users{
-		Service: application.NewUserService(
+		Service: services.NewUserService(
 			&infrastructure.UserDBRepository{DB: db},
 			nil,
 			nil,
