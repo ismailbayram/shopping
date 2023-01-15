@@ -1,8 +1,10 @@
 package infrastructure
 
 import (
+	"errors"
 	domain "github.com/ismailbayram/shopping/internal/media/domain/models"
 	"gorm.io/gorm"
+	"log"
 	"time"
 )
 
@@ -10,7 +12,7 @@ type ImageDB struct {
 	ID        uint      `gorm:"primarykey"`
 	CreatedAt time.Time `gorm:"not null;autoCreateTime"`
 	UpdatedAt time.Time `gorm:"not null;autoUpdateTime"`
-	Path      string    `gorm:"not null"`
+	Path      string    `gorm:"unique;not null;default:null"`
 }
 
 func (ImageDB) TableName() string {
@@ -34,6 +36,7 @@ func (idr ImageDBRepository) Create(image domain.Image) (domain.Image, error) {
 
 	result := idr.db.Create(&imageDB)
 	if result.Error != nil {
+		log.Println(result.Error)
 		return domain.Image{}, domain.ErrorGeneral
 	}
 
@@ -48,7 +51,11 @@ func (idr ImageDBRepository) GetByID(id uint) (domain.Image, error) {
 	result := idr.db.Where("id = ?", id).First(&imageDB)
 
 	if result.Error != nil {
-		return domain.Image{}, domain.ErrorImageNotFound
+		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+			return domain.Image{}, domain.ErrorImageNotFound
+		}
+		log.Println(result.Error)
+		return domain.Image{}, domain.ErrorGeneral
 	}
 
 	return domain.Image{
