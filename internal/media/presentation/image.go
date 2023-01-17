@@ -33,7 +33,7 @@ func ImageDetailView(app *application.Application) gin.HandlerFunc {
 
 func ImageCreateView(app *application.Application) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		// TODO: check file extension
+		// TODO: check file extension, file size
 		formFile, err := ctx.FormFile("image")
 		if errors.Is(err, http.ErrNotMultipart) {
 			ctx.JSON(http.StatusUnsupportedMediaType, gin.H{

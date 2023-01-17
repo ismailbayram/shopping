@@ -7,7 +7,7 @@ import (
 )
 
 type Users struct {
-	Service *services.UserService
+	Service services.UserService
 }
 
 func New(db *gorm.DB) Users {

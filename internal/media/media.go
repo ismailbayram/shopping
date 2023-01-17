@@ -8,7 +8,7 @@ import (
 )
 
 type Media struct {
-	Service *services.ImageService
+	Service services.ImageService
 }
 
 func New(db *gorm.DB, mediaRoot string) Media {

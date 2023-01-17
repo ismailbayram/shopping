@@ -16,18 +16,18 @@ type ImageService struct {
 	storage ImageStorage
 }
 
-func NewImageService(repo ImageRepository, storage ImageStorage) *ImageService {
-	return &ImageService{
+func NewImageService(repo ImageRepository, storage ImageStorage) ImageService {
+	return ImageService{
 		repo:    repo,
 		storage: storage,
 	}
 }
 
-func (is *ImageService) GetByID(id uint) (domain.Image, error) {
+func (is ImageService) GetByID(id uint) (domain.Image, error) {
 	return is.repo.GetByID(id)
 }
 
-func (is *ImageService) Create(name string, content []byte) (domain.Image, error) {
+func (is ImageService) Create(name string, content []byte) (domain.Image, error) {
 	path, err := is.storage.Upload(name, content)
 	if err != nil {
 		return domain.Image{}, domain.ErrorGeneral

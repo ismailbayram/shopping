@@ -31,8 +31,8 @@ type UserService struct {
 	cache       UserCache
 }
 
-func NewUserService(userRepo UserRepository, emailSender EmailSender, cache UserCache) *UserService {
-	return &UserService{
+func NewUserService(userRepo UserRepository, emailSender EmailSender, cache UserCache) UserService {
+	return UserService{
 		repo:        userRepo,
 		emailSender: emailSender,
 		cache:       cache,
