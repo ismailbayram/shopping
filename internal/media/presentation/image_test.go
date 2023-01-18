@@ -83,6 +83,18 @@ func TestMediaViews_ImageCreateView_Fail(t *testing.T) {
 	resp, _ := io.ReadAll(w.Body)
 	_ = json.Unmarshal(resp, &payload)
 	assert.Equal(t, "'image' file field is required.", payload["image"])
+
+	// with file
+	buf = new(bytes.Buffer)
+	mw = multipart.NewWriter(buf)
+	mw.CreateFormFile("image", "test.png")
+	mw.Close()
+	w = httptest.NewRecorder()
+	ctx, _ = gin.CreateTestContext(w)
+	ctx.Request, _ = http.NewRequest("POST", "/api/images/", buf)
+	ctx.Request.Header.Set("Content-Type", mw.FormDataContentType())
+	views.ImageCreateView(ctx)
+	assert.Equal(t, http.StatusInternalServerError, w.Code)
 }
 
 func TestMediaViews_ImageCreateView_Success(t *testing.T) {
