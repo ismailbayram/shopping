@@ -41,14 +41,13 @@ func (view *MediaViews) ImageCreateView(ctx *gin.Context) {
 		})
 		return
 	}
-	if errors.Is(err, http.ErrMissingFile) {
+	if errors.Is(err, http.ErrMissingFile) || fmt.Sprint(err) == "missing form body" {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"image": "'image' file field is required.",
 		})
 		return
 	}
 
-	//formFile, err := ctx.FormFile("image")
 	file, err := formFile.Open()
 	defer file.Close()
 	if err != nil {

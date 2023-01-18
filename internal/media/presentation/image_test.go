@@ -1,6 +1,7 @@
 package presentation
 
 import (
+	"bytes"
 	"encoding/json"
 	"github.com/gin-gonic/gin"
 	domain "github.com/ismailbayram/shopping/internal/media/domain/models"
@@ -8,16 +9,19 @@ import (
 	"github.com/spf13/viper"
 	"github.com/stretchr/testify/assert"
 	"io"
+	"mime/multipart"
 	"net/http"
 	"net/http/httptest"
 	"testing"
 )
 
-func TestImageDetailView(t *testing.T) {
+func TestMediaViews_ImageDetailView(t *testing.T) {
 	mockIS := &mocks.ImageService{}
 	views := NewMediaViews(mockIS)
 	var payload map[string]any
 	gin.SetMode(gin.TestMode)
+	viper.Set("server.domain", "https://shopping.com")
+	viper.Set("server.mediaurl", "media")
 
 	// without imageId
 	w := httptest.NewRecorder()
@@ -40,8 +44,6 @@ func TestImageDetailView(t *testing.T) {
 	assert.Equal(t, map[string]any{}, payload)
 
 	// with imageId exists
-	viper.Set("server.domain", "https://shopping.com")
-	viper.Set("server.mediaurl", "media")
 	w = httptest.NewRecorder()
 	ctx, _ = gin.CreateTestContext(w)
 	ctx.Params = []gin.Param{{Key: "imageId", Value: "1"}}
@@ -49,6 +51,69 @@ func TestImageDetailView(t *testing.T) {
 	views.ImageDetailView(ctx)
 	assert.Equal(t, http.StatusOK, w.Code)
 	resp, _ = io.ReadAll(w.Body)
+	_ = json.Unmarshal(resp, &payload)
+	assert.Equal(t, 1, int(payload["id"].(float64)))
+	assert.Equal(t, "https://shopping.com/media/image.png", payload["url"])
+}
+
+func TestMediaViews_ImageCreateView_Fail(t *testing.T) {
+	mockIS := &mocks.ImageService{}
+	views := NewMediaViews(mockIS)
+	var payload map[string]any
+	gin.SetMode(gin.TestMode)
+
+	// wrong request type
+	w := httptest.NewRecorder()
+	ctx, _ := gin.CreateTestContext(w)
+	ctx.Request, _ = http.NewRequest("POST", "/api/images/", nil)
+
+	views.ImageCreateView(ctx)
+	assert.Equal(t, http.StatusUnsupportedMediaType, w.Code)
+
+	// without file
+	w = httptest.NewRecorder()
+	buf := new(bytes.Buffer)
+	ctx, _ = gin.CreateTestContext(w)
+	ctx.Request, _ = http.NewRequest("POST", "/api/images/", nil)
+	mw := multipart.NewWriter(buf)
+	ctx.Request.Header.Set("Content-Type", mw.FormDataContentType())
+
+	views.ImageCreateView(ctx)
+	assert.Equal(t, http.StatusBadRequest, w.Code)
+	resp, _ := io.ReadAll(w.Body)
+	_ = json.Unmarshal(resp, &payload)
+	assert.Equal(t, "'image' file field is required.", payload["image"])
+}
+
+func TestMediaViews_ImageCreateView_Success(t *testing.T) {
+	mockIS := &mocks.ImageService{}
+	views := NewMediaViews(mockIS)
+	var payload map[string]any
+	gin.SetMode(gin.TestMode)
+	viper.Set("server.domain", "https://shopping.com")
+	viper.Set("server.mediaurl", "media")
+
+	buf := new(bytes.Buffer)
+	mw := multipart.NewWriter(buf)
+	fileWriter, _ := mw.CreateFormFile("image", "test.png")
+	fileWriter.Write([]byte("image content"))
+	mw.Close()
+	w := httptest.NewRecorder()
+	ctx, _ := gin.CreateTestContext(w)
+	ctx.Request, _ = http.NewRequest("POST", "/api/images/", buf)
+	ctx.Request.Header.Set("Content-Type", mw.FormDataContentType())
+
+	mockIS.On(
+		"Create",
+		"test.png",
+		[]byte("image content"),
+	).Return(
+		domain.Image{ID: 1, Path: "image.png"},
+		nil,
+	).Once()
+	views.ImageCreateView(ctx)
+	assert.Equal(t, http.StatusOK, w.Code)
+	resp, _ := io.ReadAll(w.Body)
 	_ = json.Unmarshal(resp, &payload)
 	assert.Equal(t, 1, int(payload["id"].(float64)))
 	assert.Equal(t, "https://shopping.com/media/image.png", payload["url"])
