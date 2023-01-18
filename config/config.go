@@ -57,7 +57,7 @@ func getDefaultConfig() *Configuration {
 			Domain:   "http://localhost:8080",
 			Port:     "8080",
 			Timeout:  10,
-			MediaUrl: "/media",
+			MediaUrl: "media",
 		},
 		Storage: StorageConfiguration{
 			MediaRoot: "media",
