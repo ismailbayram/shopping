@@ -51,9 +51,10 @@ func TestMediaViews_ImageDetailView(t *testing.T) {
 	views.ImageDetailView(ctx)
 	assert.Equal(t, http.StatusOK, w.Code)
 	resp, _ = io.ReadAll(w.Body)
-	_ = json.Unmarshal(resp, &payload)
-	assert.Equal(t, 1, int(payload["id"].(float64)))
-	assert.Equal(t, "https://shopping.com/media/image.png", payload["url"])
+	var imageDTO ImageDTO
+	_ = json.Unmarshal(resp, &imageDTO)
+	assert.Equal(t, 1, imageDTO.ID)
+	assert.Equal(t, "https://shopping.com/media/image.png", imageDTO.Url)
 }
 
 func TestMediaViews_ImageCreateView_Fail(t *testing.T) {
@@ -100,7 +101,6 @@ func TestMediaViews_ImageCreateView_Fail(t *testing.T) {
 func TestMediaViews_ImageCreateView_Success(t *testing.T) {
 	mockIS := &mocks.ImageService{}
 	views := NewMediaViews(mockIS)
-	var payload map[string]any
 	gin.SetMode(gin.TestMode)
 	viper.Set("server.domain", "https://shopping.com")
 	viper.Set("server.mediaurl", "media")
@@ -126,7 +126,8 @@ func TestMediaViews_ImageCreateView_Success(t *testing.T) {
 	views.ImageCreateView(ctx)
 	assert.Equal(t, http.StatusOK, w.Code)
 	resp, _ := io.ReadAll(w.Body)
-	_ = json.Unmarshal(resp, &payload)
-	assert.Equal(t, 1, int(payload["id"].(float64)))
-	assert.Equal(t, "https://shopping.com/media/image.png", payload["url"])
+	var imageDTO ImageDTO
+	_ = json.Unmarshal(resp, &imageDTO)
+	assert.Equal(t, 1, imageDTO.ID)
+	assert.Equal(t, "https://shopping.com/media/image.png", imageDTO.Url)
 }

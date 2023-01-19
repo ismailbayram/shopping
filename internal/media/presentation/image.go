@@ -23,10 +23,7 @@ func (view *MediaViews) ImageDetailView(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusOK, gin.H{
-		"id":  image.ID,
-		"url": image.Url(view.GetBaseURL()),
-	})
+	ctx.JSON(http.StatusOK, ToImageDTO(view.GetBaseURL(), image))
 }
 
 func (view *MediaViews) ImageCreateView(ctx *gin.Context) {
@@ -68,8 +65,5 @@ func (view *MediaViews) ImageCreateView(ctx *gin.Context) {
 
 	image, err := view.Service.Create(formFile.Filename, content)
 
-	ctx.JSON(http.StatusOK, gin.H{
-		"id":  image.ID,
-		"url": image.Url(view.GetBaseURL()),
-	})
+	ctx.JSON(http.StatusOK, ToImageDTO(view.GetBaseURL(), image))
 }
