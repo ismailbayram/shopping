@@ -15,14 +15,9 @@ func NewRouter(app *application.Application) *gin.Engine {
 
 	r.StaticFS(app.MediaUrl, http.Dir("media"))
 
-	api := r.Group("/api")
-	api.GET("/login", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{
-			"message": "pong",
-		})
-	})
-	api.GET("/images/:imageId", app.Media.Views.ImageDetailView)
-	api.POST("/images", app.Media.Views.ImageCreateView)
+	adminAPI := r.Group("/admin/api")
+	adminAPI.GET("/images/:imageId", app.Media.Views.ImageDetailView)
+	adminAPI.POST("/images", app.Media.Views.ImageCreateView)
 
 	return r
 }

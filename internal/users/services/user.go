@@ -76,6 +76,7 @@ func (us *UserService) Register(email string, password string, firstName string,
 		LastName:   lastName,
 		IsActive:   true,
 		IsVerified: false,
+		IsAdmin:    false,
 		Password:   generatePassword(password),
 	})
 	if err != nil {

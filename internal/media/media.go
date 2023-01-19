@@ -9,16 +9,18 @@ import (
 )
 
 type Media struct {
-	Views presentation.MediaViews
+	Views        presentation.MediaViews
+	ImageService services.ImageService
 }
 
 func New(db *gorm.DB, mediaRoot string) Media {
+	imageService := services.NewImageService(
+		dbInfrastructure.NewImageDBRepository(db),
+		fileInfrastructure.NewFileStorage(mediaRoot),
+	)
+
 	return Media{
-		Views: presentation.NewMediaViews(
-			services.NewImageService(
-				dbInfrastructure.NewImageDBRepository(db),
-				fileInfrastructure.NewFileStorage(mediaRoot),
-			),
-		),
+		Views:        presentation.NewMediaViews(imageService),
+		ImageService: imageService,
 	}
 }

@@ -19,6 +19,7 @@ type User struct {
 	LastName   string
 	IsActive   bool
 	IsVerified bool
+	IsAdmin    bool
 	Password   string
 }
 
