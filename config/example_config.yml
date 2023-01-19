@@ -1,14 +1,14 @@
-secretkey: "TOP_SECRET"
-database:
-  name: "shopping"
-  username: "postgres"
-  password: "123456"
-  host: "localhost"
-  port: "5432"
-server:
-  domain: "http://localhost:8080"
-  port: "8080"
-  timeout: 10
-  mediaurl: "/media"
-storage:
-  mediadir: "media"
+SecretKey: "TOP_SECRET"
+Database:
+  Name: "shopping"
+  Username: "postgres"
+  Password: "123456"
+  Host: "localhost"
+  Port: "5432"
+Server:
+  Domain: "http://localhost:8080"
+  Port: "8080"
+  Timeout: 10
+  MediaUrl: "media"
+Storage:
+  MediaDir: "media"

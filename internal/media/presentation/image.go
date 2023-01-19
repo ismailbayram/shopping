@@ -18,8 +18,6 @@ func (view *MediaViews) ImageDetailView(ctx *gin.Context) {
 	}
 
 	image, err := view.Service.GetByID(uint(id))
-	fmt.Println(id)
-	fmt.Println(err)
 	if err != nil {
 		ctx.JSON(http.StatusNotFound, gin.H{})
 		return
