@@ -1,0 +1,17 @@
+on: [push, pull_request]
+name: Test & Quality
+jobs:
+  test_and_quality:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build containers
+        run: |
+          cp ./config/.env.test ./config/.env
+          docker-compose build test
+      - name: Run tests
+        run: docker-compose run test test_and_coverage
+      - name: Go Vet
+        run: docker-compose run test vet
+      - name: Static Check
+        run: docker-compose run test staticcheck

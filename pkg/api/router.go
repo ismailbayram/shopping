@@ -1,23 +1,25 @@
 package api
 
 import (
+	"github.com/gin-contrib/static"
 	"github.com/gin-gonic/gin"
 	"github.com/ismailbayram/shopping/internal/application"
-	"net/http"
 )
 
 func NewRouter(app *application.Application) *gin.Engine {
-	//f, _ := os.Create("shopping.log")
-	//gin.DefaultWriter = io.MultiWriter(f)
-	//	r.Use(gin.Recovery())
+	router := gin.Default()
 
-	r := gin.Default()
+	router.Use(static.Serve("/", static.LocalFile(app.MediaUrl, true)))
 
-	r.StaticFS(app.MediaUrl, http.Dir("media"))
+	router.Use(gin.Logger())
+	router.Use(PanicLoggerMiddleware)
+	router.Use(SecurityMiddleware)
+	router.Use(ErrorHandlerMiddleware)
+	router.Use(AuthenticationMiddleware(app.Users.Service))
 
-	adminAPI := r.Group("/admin/api")
+	adminAPI := router.Group("/admin/api")
 	adminAPI.GET("/images/:imageId", app.Media.Views.ImageDetailView)
 	adminAPI.POST("/images", app.Media.Views.ImageCreateView)
 
-	return r
+	return router
 }
