@@ -1,21 +1,25 @@
 package config
 
 import (
-	"github.com/spf13/viper"
+	"github.com/joho/godotenv"
 	"os"
+	"strconv"
 )
 
 type Configuration struct {
+	ENV       string
+	SentryDSN string
 	SecretKey string
 	Database  DatabaseConfiguration
 	Server    ServerConfiguration
+	SMTP      SMTPConfiguration
 	Storage   StorageConfiguration
 }
 
 type ServerConfiguration struct {
 	Domain   string
 	Port     string
-	Timeout  uint
+	Timeout  int
 	MediaUrl string
 }
 
@@ -27,67 +31,54 @@ type DatabaseConfiguration struct {
 	Port     string
 }
 
+type SMTPConfiguration struct {
+	From     string
+	Host     string
+	Port     string
+	Password string
+}
+
 type StorageConfiguration struct {
 	MediaRoot string
 }
 
 func Init() *Configuration {
-	config := getDefaultConfig()
-	readConfiguration()
-
-	err := viper.Unmarshal(config)
+	err := godotenv.Load("./config/.env")
 	if err != nil {
-		panic(err)
-	}
-
-	return config
-}
-
-func getDefaultConfig() *Configuration {
-	return &Configuration{
-		SecretKey: "TOP_SECRET",
-		Database: DatabaseConfiguration{
-			Name:     "shopping",
-			Username: "postgres",
-			Password: "123456",
-			Host:     "localhost",
-			Port:     "5432",
-		},
-		Server: ServerConfiguration{
-			Domain:   "http://localhost:8080",
-			Port:     "8080",
-			Timeout:  10,
-			MediaUrl: "media",
-		},
-		Storage: StorageConfiguration{
-			MediaRoot: "media",
-		},
-	}
-}
-
-func readConfiguration() {
-	viper.AddConfigPath("./config")
-	viper.SetConfigName("config")
-	viper.SetConfigType("yaml")
-
-	bindEnvs()
-
-	viper.AutomaticEnv()
-
-	err := viper.ReadInConfig()
-	if err != nil {
-		if _, err := os.Stat("./config/config.yml"); os.IsNotExist(err) {
-			os.Create("./config/config.yml")
+		if _, err := os.Stat("./config/.env"); os.IsNotExist(err) {
+			os.Create("./config/.env")
 		}
 	}
+
+	return &Configuration{
+		ENV:       os.Getenv("ENV"),
+		SecretKey: os.Getenv("SECRET_KEY"),
+		SentryDSN: os.Getenv("SENTRY_DSN"),
+		Database: DatabaseConfiguration{
+			Name:     os.Getenv("DB_NAME"),
+			Username: os.Getenv("DB_USER"),
+			Password: os.Getenv("DB_PASSWORD"),
+			Host:     os.Getenv("DB_HOST"),
+			Port:     os.Getenv("DB_PORT"),
+		},
+		Server: ServerConfiguration{
+			Domain:  os.Getenv("SW_DOMAIN"),
+			Port:    os.Getenv("SW_PORT"),
+			Timeout: convertInt("SW_TIMEOUT"),
+		},
+		SMTP: SMTPConfiguration{
+			From:     os.Getenv("SMTP_FROM"),
+			Host:     os.Getenv("SMTP_HOST"),
+			Port:     os.Getenv("SMTP_PORT"),
+			Password: os.Getenv("SMTP_PASSWORD"),
+		},
+	}
 }
 
-func bindEnvs() {
-	viper.BindEnv("database.host", "DB_HOST")
-	viper.BindEnv("database.port", "DB_PORT")
-	viper.BindEnv("database.name", "DB_NAME")
-	viper.BindEnv("database.username", "DB_USER")
-	viper.BindEnv("database.password", "DB_PASSWORD")
-
-	viper.BindEnv("server.port", "SW_PORT")
+func convertInt(envKey string) int {
+	value, err := strconv.Atoi(os.Getenv(envKey))
+	if err != nil {
+		return 0
+	}
+	return value
 }

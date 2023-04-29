@@ -21,7 +21,7 @@ func main() {
 	app := &application.Application{
 		SiteUrl:  cfg.Server.Domain,
 		MediaUrl: cfg.Server.MediaUrl,
-		Users:    users.New(db.Conn),
+		Users:    users.New(db.Conn, cfg),
 		Media:    media.New(db.Conn, cfg.Storage.MediaRoot),
 	}
 

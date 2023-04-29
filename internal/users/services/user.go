@@ -4,8 +4,8 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 	"fmt"
-	domain "github.com/ismailbayram/shopping/internal/users/domain/models"
-	"log"
+	"github.com/ismailbayram/shopping/internal/users/domain"
+	"os"
 )
 
 type UserRepository interface {
@@ -14,15 +14,16 @@ type UserRepository interface {
 	GetByID(uint) (domain.User, error)
 	GetByEmail(string) (domain.User, error)
 	GetByToken(string) (domain.User, error)
-	All() ([]domain.User, error)
+	All(map[string]interface{}) ([]domain.User, error)
 }
 
 type EmailSender interface {
-	SendWelcomeEmail(string)
+	SendWelcomeEmail(string, string)
 }
 
 type UserCache interface {
-	GetUserIDByVerificationToken(string) uint
+	GetUserIDByVerificationToken(string) (uint, error)
+	SetUserVerificationToken(string, uint)
 }
 
 type UserService struct {
@@ -31,8 +32,8 @@ type UserService struct {
 	cache       UserCache
 }
 
-func NewUserService(userRepo UserRepository, emailSender EmailSender, cache UserCache) UserService {
-	return UserService{
+func NewUserService(userRepo UserRepository, emailSender EmailSender, cache UserCache) *UserService {
+	return &UserService{
 		repo:        userRepo,
 		emailSender: emailSender,
 		cache:       cache,
@@ -47,21 +48,21 @@ func (us *UserService) GetByToken(token string) (domain.User, error) {
 	return us.repo.GetByToken(token)
 }
 
-func (us *UserService) Login(email string, password string) (*string, error) {
+func (us *UserService) Login(email string, password string) (string, error) {
 	user, err := us.repo.GetByEmail(email)
 	if err != nil {
-		log.Println(err)
-		return nil, domain.ErrorUserNotFound
+		return "", domain.ErrorUserNotFound
 	}
 
-	if user.Password != generatePassword(password) {
-		return nil, domain.ErrorWrongPassword
+	if !user.IsVerified {
+		return "", domain.ErrorUserNotVerified
 	}
 
-	h := sha256.New()
-	h.Write([]byte(fmt.Sprintf("%s%s", "iso@iso.com", "123456")))
-	token := hex.EncodeToString(h.Sum(nil))
-	return &token, nil
+	if err := user.CheckPassword(password); err != nil {
+		return "", err
+	}
+
+	return user.Token, nil
 }
 
 func (us *UserService) Register(email string, password string, firstName string, lastName string) error {
@@ -70,46 +71,60 @@ func (us *UserService) Register(email string, password string, firstName string,
 		return domain.ErrorUserAlreadyExists
 	}
 
-	user, err := us.repo.Create(domain.User{
+	user := domain.User{
 		Email:      email,
 		FirstName:  firstName,
 		LastName:   lastName,
 		IsActive:   true,
 		IsVerified: false,
 		IsAdmin:    false,
-		Password:   generatePassword(password),
-	})
+		Token:      generateToken(email),
+	}
+	user.SetPassword(password)
+
+	createdUser, err := us.repo.Create(user)
 	if err != nil {
-		log.Println(err)
 		return err
 	}
-	go us.emailSender.SendWelcomeEmail(user.Email)
+	go us.emailSender.SendWelcomeEmail(createdUser.Token, createdUser.Email)
 	return nil
 }
 
 func (us *UserService) Verify(token string) error {
-	userID := us.cache.GetUserIDByVerificationToken(token)
-	if userID == uint(0) {
-		return domain.ErrorUserNotFound
-	}
-
-	user, err := us.repo.GetByID(userID)
+	user, err := us.repo.GetByToken(token)
 	if err != nil {
-		log.Println(err)
-		return domain.ErrorGeneral
+		return domain.ErrorUserNotFound
 	}
 
 	user.IsVerified = true
 	err = us.repo.Update(user)
 	if err != nil {
-		log.Println(err)
-		return domain.ErrorGeneral
+		return err
 	}
 	return nil
 }
 
-func generatePassword(password string) string {
+func (us *UserService) ChangePassword(user domain.User, newPassword string) error {
+	user.SetPassword(newPassword)
+	if err := us.repo.Update(user); err != nil {
+		return err
+	}
+	// TODO: changing password inform mail
+	return nil
+}
+
+//func (us *UserService) generateAndSetVerificationToken(userID uint) string {
+//	h := sha256.New()
+//	h.Write([]byte(fmt.Sprintf("%d%s", userID, os.Getenv("SECRET_KEY"))))
+//	token := hex.EncodeToString(h.Sum(nil))
+//
+//	us.cache.SetUserVerificationToken(token, userID)
+//
+//	return token
+//}
+
+func generateToken(email string) string {
 	h := sha256.New()
-	h.Write([]byte(password))
+	h.Write([]byte(fmt.Sprintf("%s%s", email, os.Getenv("SECRET_KEY"))))
 	return hex.EncodeToString(h.Sum(nil))
 }

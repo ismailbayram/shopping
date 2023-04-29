@@ -1,6 +1,6 @@
 package domain
 
-import userDomain "github.com/ismailbayram/shopping/internal/users/domain/models"
+import userDomain "github.com/ismailbayram/shopping/internal/users/domain"
 
 type Order struct {
 	ID     uint
