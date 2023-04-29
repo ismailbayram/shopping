@@ -2,7 +2,7 @@ package infrastructure
 
 import (
 	"errors"
-	domain "github.com/ismailbayram/shopping/internal/media/domain/models"
+	"github.com/ismailbayram/shopping/internal/media/models"
 	"gorm.io/gorm"
 	"log"
 	"time"
@@ -29,7 +29,7 @@ func NewImageDBRepository(db *gorm.DB) ImageDBRepository {
 	}
 }
 
-func (idr ImageDBRepository) Create(image domain.Image) (domain.Image, error) {
+func (idr ImageDBRepository) Create(image models.Image) (models.Image, error) {
 	imageDB := ImageDB{
 		Path: image.Path,
 	}
@@ -37,28 +37,28 @@ func (idr ImageDBRepository) Create(image domain.Image) (domain.Image, error) {
 	result := idr.db.Create(&imageDB)
 	if result.Error != nil {
 		log.Println(result.Error)
-		return domain.Image{}, domain.ErrorGeneral
+		return models.Image{}, models.ErrorGeneral
 	}
 
-	return domain.Image{
+	return models.Image{
 		ID:   imageDB.ID,
 		Path: imageDB.Path,
 	}, nil
 }
 
-func (idr ImageDBRepository) GetByID(id uint) (domain.Image, error) {
+func (idr ImageDBRepository) GetByID(id uint) (models.Image, error) {
 	var imageDB ImageDB
 	result := idr.db.Where("id = ?", id).First(&imageDB)
 
 	if result.Error != nil {
 		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
-			return domain.Image{}, domain.ErrorImageNotFound
+			return models.Image{}, models.ErrorImageNotFound
 		}
 		log.Println(result.Error)
-		return domain.Image{}, domain.ErrorGeneral
+		return models.Image{}, models.ErrorGeneral
 	}
 
-	return domain.Image{
+	return models.Image{
 		ID:   imageDB.ID,
 		Path: imageDB.Path,
 	}, nil

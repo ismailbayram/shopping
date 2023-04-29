@@ -1,14 +1,14 @@
 package services
 
 import (
-	domain "github.com/ismailbayram/shopping/internal/products/domain/models"
+	"github.com/ismailbayram/shopping/internal/products/models"
 	"github.com/ismailbayram/shopping/test/mocks"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
 
 func TestProductService_GetByID(t *testing.T) {
-	product := domain.Product{
+	product := models.Product{
 		ID:   2,
 		Name: "test",
 	}
@@ -16,7 +16,7 @@ func TestProductService_GetByID(t *testing.T) {
 	mockedPR := &mocks.ProductRepository{}
 	PS := NewProductService(mockedPR)
 
-	mockedPR.On("GetByID", uint(1)).Return(domain.Product{}, domain.ErrorProductNotFound)
+	mockedPR.On("GetByID", uint(1)).Return(models.Product{}, models.ErrorProductNotFound)
 	productGot, err := PS.GetByID(1)
 	assert.Equal(t, uint(0), productGot.ID)
 	assert.NotNil(t, err)

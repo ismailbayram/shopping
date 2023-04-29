@@ -2,13 +2,13 @@ package presentation
 
 import (
 	"fmt"
-	domain "github.com/ismailbayram/shopping/internal/media/domain/models"
+	"github.com/ismailbayram/shopping/internal/media/models"
 	"github.com/spf13/viper"
 )
 
 type ImageService interface {
-	GetByID(uint) (domain.Image, error)
-	Create(string, []byte) (domain.Image, error)
+	GetByID(uint) (models.Image, error)
+	Create(string, []byte) (models.Image, error)
 }
 
 type MediaViews struct {

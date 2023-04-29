@@ -1,12 +1,12 @@
 package infrastructure
 
 import (
-	"github.com/ismailbayram/shopping/internal/users/domain"
+	"github.com/ismailbayram/shopping/internal/users/models"
 	"time"
 )
 
-func ToUser(userDB UserDB) domain.User {
-	return domain.User{
+func ToUser(userDB UserDB) models.User {
+	return models.User{
 		ID:         userDB.ID,
 		Email:      userDB.Email,
 		FirstName:  userDB.FirstName,
@@ -19,7 +19,7 @@ func ToUser(userDB UserDB) domain.User {
 	}
 }
 
-func ToUserDB(user domain.User) UserDB {
+func ToUserDB(user models.User) UserDB {
 	return UserDB{
 		ID:         user.ID,
 		UpdatedAt:  time.Now(),

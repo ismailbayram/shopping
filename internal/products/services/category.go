@@ -1,12 +1,14 @@
 package services
 
-import domain "github.com/ismailbayram/shopping/internal/products/domain/models"
+import (
+	"github.com/ismailbayram/shopping/internal/products/models"
+)
 
 type CategoryRepository interface {
-	GetByID(uint) (domain.Category, error)
-	Create(domain.Category) (domain.Category, error)
-	Update(domain.Category) error
-	All() ([]domain.Category, error)
+	GetByID(uint) (models.Category, error)
+	Create(models.Category) (models.Category, error)
+	Update(models.Category) error
+	All() ([]models.Category, error)
 }
 
 type CategoryService struct {
@@ -18,6 +20,6 @@ func NewCategoryService(repo CategoryRepository, productRepo ProductRepository) 
 	return &CategoryService{repo: repo, productRepo: productRepo}
 }
 
-func (cs *CategoryService) GetByID(id uint) (domain.Category, error) {
+func (cs *CategoryService) GetByID(id uint) (models.Category, error) {
 	return cs.repo.GetByID(id)
 }

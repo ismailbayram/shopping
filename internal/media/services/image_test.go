@@ -2,14 +2,14 @@ package services
 
 import (
 	"errors"
-	domain "github.com/ismailbayram/shopping/internal/media/domain/models"
+	"github.com/ismailbayram/shopping/internal/media/models"
 	"github.com/ismailbayram/shopping/test/mocks"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
 
 func TestImageService_GetByID(t *testing.T) {
-	image := domain.Image{
+	image := models.Image{
 		ID:   2,
 		Path: "media/images/test.png",
 	}
@@ -18,7 +18,7 @@ func TestImageService_GetByID(t *testing.T) {
 	mockedIS := &mocks.ImageStorage{}
 	IS := NewImageService(mockedIR, mockedIS)
 
-	mockedIR.On("GetByID", uint(1)).Return(domain.Image{}, domain.ErrorImageNotFound)
+	mockedIR.On("GetByID", uint(1)).Return(models.Image{}, models.ErrorImageNotFound)
 	imageGot, err := IS.GetByID(1)
 	assert.Equal(t, uint(0), imageGot.ID)
 	assert.NotNil(t, err)
@@ -38,10 +38,10 @@ func TestImageService_Create(t *testing.T) {
 	mockedIS.On("Upload", "image.png", []byte("file content")).Return("", errors.New("dump")).Once()
 	image, err := IS.Create("image.png", []byte("file content"))
 	assert.Equal(t, uint(0), image.ID)
-	assert.Equal(t, domain.ErrorGeneral, err)
+	assert.Equal(t, models.ErrorGeneral, err)
 
 	mockedIS.On("Upload", "image.png", []byte("file content")).Return("images/image.png", nil).Once()
-	mockedIR.On("Create", domain.Image{Path: "images/image.png"}).Return(domain.Image{ID: 1, Path: "images/image.png"}, nil)
+	mockedIR.On("Create", models.Image{Path: "images/image.png"}).Return(models.Image{ID: 1, Path: "images/image.png"}, nil)
 	image, err = IS.Create("image.png", []byte("file content"))
 	assert.Nil(t, err)
 	assert.Equal(t, uint(1), image.ID)

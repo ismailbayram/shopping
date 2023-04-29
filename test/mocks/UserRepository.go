@@ -3,7 +3,7 @@
 package mocks
 
 import (
-	domain "github.com/ismailbayram/shopping/internal/users/domain"
+	models "github.com/ismailbayram/shopping/internal/users/models"
 	mock "github.com/stretchr/testify/mock"
 )
 
@@ -13,19 +13,19 @@ type UserRepository struct {
 }
 
 // All provides a mock function with given fields: _a0
-func (_m *UserRepository) All(_a0 map[string]interface{}) ([]domain.User, error) {
+func (_m *UserRepository) All(_a0 map[string]interface{}) ([]models.User, error) {
 	ret := _m.Called(_a0)
 
-	var r0 []domain.User
+	var r0 []models.User
 	var r1 error
-	if rf, ok := ret.Get(0).(func(map[string]interface{}) ([]domain.User, error)); ok {
+	if rf, ok := ret.Get(0).(func(map[string]interface{}) ([]models.User, error)); ok {
 		return rf(_a0)
 	}
-	if rf, ok := ret.Get(0).(func(map[string]interface{}) []domain.User); ok {
+	if rf, ok := ret.Get(0).(func(map[string]interface{}) []models.User); ok {
 		r0 = rf(_a0)
 	} else {
 		if ret.Get(0) != nil {
-			r0 = ret.Get(0).([]domain.User)
+			r0 = ret.Get(0).([]models.User)
 		}
 	}
 
@@ -39,21 +39,21 @@ func (_m *UserRepository) All(_a0 map[string]interface{}) ([]domain.User, error)
 }
 
 // Create provides a mock function with given fields: _a0
-func (_m *UserRepository) Create(_a0 domain.User) (domain.User, error) {
+func (_m *UserRepository) Create(_a0 models.User) (models.User, error) {
 	ret := _m.Called(_a0)
 
-	var r0 domain.User
+	var r0 models.User
 	var r1 error
-	if rf, ok := ret.Get(0).(func(domain.User) (domain.User, error)); ok {
+	if rf, ok := ret.Get(0).(func(models.User) (models.User, error)); ok {
 		return rf(_a0)
 	}
-	if rf, ok := ret.Get(0).(func(domain.User) domain.User); ok {
+	if rf, ok := ret.Get(0).(func(models.User) models.User); ok {
 		r0 = rf(_a0)
 	} else {
-		r0 = ret.Get(0).(domain.User)
+		r0 = ret.Get(0).(models.User)
 	}
 
-	if rf, ok := ret.Get(1).(func(domain.User) error); ok {
+	if rf, ok := ret.Get(1).(func(models.User) error); ok {
 		r1 = rf(_a0)
 	} else {
 		r1 = ret.Error(1)
@@ -63,18 +63,18 @@ func (_m *UserRepository) Create(_a0 domain.User) (domain.User, error) {
 }
 
 // GetByEmail provides a mock function with given fields: _a0
-func (_m *UserRepository) GetByEmail(_a0 string) (domain.User, error) {
+func (_m *UserRepository) GetByEmail(_a0 string) (models.User, error) {
 	ret := _m.Called(_a0)
 
-	var r0 domain.User
+	var r0 models.User
 	var r1 error
-	if rf, ok := ret.Get(0).(func(string) (domain.User, error)); ok {
+	if rf, ok := ret.Get(0).(func(string) (models.User, error)); ok {
 		return rf(_a0)
 	}
-	if rf, ok := ret.Get(0).(func(string) domain.User); ok {
+	if rf, ok := ret.Get(0).(func(string) models.User); ok {
 		r0 = rf(_a0)
 	} else {
-		r0 = ret.Get(0).(domain.User)
+		r0 = ret.Get(0).(models.User)
 	}
 
 	if rf, ok := ret.Get(1).(func(string) error); ok {
@@ -87,18 +87,18 @@ func (_m *UserRepository) GetByEmail(_a0 string) (domain.User, error) {
 }
 
 // GetByID provides a mock function with given fields: _a0
-func (_m *UserRepository) GetByID(_a0 uint) (domain.User, error) {
+func (_m *UserRepository) GetByID(_a0 uint) (models.User, error) {
 	ret := _m.Called(_a0)
 
-	var r0 domain.User
+	var r0 models.User
 	var r1 error
-	if rf, ok := ret.Get(0).(func(uint) (domain.User, error)); ok {
+	if rf, ok := ret.Get(0).(func(uint) (models.User, error)); ok {
 		return rf(_a0)
 	}
-	if rf, ok := ret.Get(0).(func(uint) domain.User); ok {
+	if rf, ok := ret.Get(0).(func(uint) models.User); ok {
 		r0 = rf(_a0)
 	} else {
-		r0 = ret.Get(0).(domain.User)
+		r0 = ret.Get(0).(models.User)
 	}
 
 	if rf, ok := ret.Get(1).(func(uint) error); ok {
@@ -111,18 +111,18 @@ func (_m *UserRepository) GetByID(_a0 uint) (domain.User, error) {
 }
 
 // GetByToken provides a mock function with given fields: _a0
-func (_m *UserRepository) GetByToken(_a0 string) (domain.User, error) {
+func (_m *UserRepository) GetByToken(_a0 string) (models.User, error) {
 	ret := _m.Called(_a0)
 
-	var r0 domain.User
+	var r0 models.User
 	var r1 error
-	if rf, ok := ret.Get(0).(func(string) (domain.User, error)); ok {
+	if rf, ok := ret.Get(0).(func(string) (models.User, error)); ok {
 		return rf(_a0)
 	}
-	if rf, ok := ret.Get(0).(func(string) domain.User); ok {
+	if rf, ok := ret.Get(0).(func(string) models.User); ok {
 		r0 = rf(_a0)
 	} else {
-		r0 = ret.Get(0).(domain.User)
+		r0 = ret.Get(0).(models.User)
 	}
 
 	if rf, ok := ret.Get(1).(func(string) error); ok {
@@ -135,11 +135,11 @@ func (_m *UserRepository) GetByToken(_a0 string) (domain.User, error) {
 }
 
 // Update provides a mock function with given fields: _a0
-func (_m *UserRepository) Update(_a0 domain.User) error {
+func (_m *UserRepository) Update(_a0 models.User) error {
 	ret := _m.Called(_a0)
 
 	var r0 error
-	if rf, ok := ret.Get(0).(func(domain.User) error); ok {
+	if rf, ok := ret.Get(0).(func(models.User) error); ok {
 		r0 = rf(_a0)
 	} else {
 		r0 = ret.Error(0)

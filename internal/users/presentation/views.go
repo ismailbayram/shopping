@@ -2,17 +2,17 @@ package presentation
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/ismailbayram/shopping/internal/users/domain"
+	"github.com/ismailbayram/shopping/internal/users/models"
 	"net/http"
 )
 
 type UserService interface {
-	GetByID(uint) (domain.User, error)
-	GetByToken(string) (domain.User, error)
+	GetByID(uint) (models.User, error)
+	GetByToken(string) (models.User, error)
 	Login(string, string) (string, error)
 	Register(string, string, string, string) error
 	Verify(string) error
-	ChangePassword(domain.User, string) error
+	ChangePassword(models.User, string) error
 }
 
 type UserViews struct {
@@ -50,7 +50,7 @@ func (view *UserViews) Register(ctx *gin.Context) {
 	}
 
 	if registerDTO.Password1 != registerDTO.Password2 {
-		_ = ctx.Error(domain.ErrorPasswordUnmatched).SetType(gin.ErrorTypePublic)
+		_ = ctx.Error(models.ErrorPasswordUnmatched).SetType(gin.ErrorTypePublic)
 		return
 	}
 
@@ -85,7 +85,7 @@ func (view *UserViews) ChangePassword(ctx *gin.Context) {
 	}
 
 	if changePasswordDTO.NewPassword1 != changePasswordDTO.NewPassword2 {
-		_ = ctx.Error(domain.ErrorPasswordUnmatched).SetType(gin.ErrorTypePublic)
+		_ = ctx.Error(models.ErrorPasswordUnmatched).SetType(gin.ErrorTypePublic)
 		return
 	}
 

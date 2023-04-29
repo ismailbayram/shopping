@@ -1,10 +1,12 @@
 package services
 
-import domain "github.com/ismailbayram/shopping/internal/media/domain/models"
+import (
+	"github.com/ismailbayram/shopping/internal/media/models"
+)
 
 type ImageRepository interface {
-	Create(domain.Image) (domain.Image, error)
-	GetByID(uint) (domain.Image, error)
+	Create(models.Image) (models.Image, error)
+	GetByID(uint) (models.Image, error)
 }
 
 type ImageStorage interface {
@@ -23,15 +25,15 @@ func NewImageService(repo ImageRepository, storage ImageStorage) ImageService {
 	}
 }
 
-func (is ImageService) GetByID(id uint) (domain.Image, error) {
+func (is ImageService) GetByID(id uint) (models.Image, error) {
 	return is.repo.GetByID(id)
 }
 
-func (is ImageService) Create(name string, content []byte) (domain.Image, error) {
+func (is ImageService) Create(name string, content []byte) (models.Image, error) {
 	path, err := is.storage.Upload(name, content)
 	if err != nil {
-		return domain.Image{}, domain.ErrorGeneral
+		return models.Image{}, models.ErrorGeneral
 	}
 
-	return is.repo.Create(domain.Image{Path: path})
+	return is.repo.Create(models.Image{Path: path})
 }

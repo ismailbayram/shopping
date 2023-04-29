@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"github.com/gin-gonic/gin"
-	domain "github.com/ismailbayram/shopping/internal/media/domain/models"
+	"github.com/ismailbayram/shopping/internal/media/models"
 	"github.com/ismailbayram/shopping/test/mocks"
 	"github.com/spf13/viper"
 	"github.com/stretchr/testify/assert"
@@ -36,7 +36,7 @@ func TestMediaViews_ImageDetailView(t *testing.T) {
 	w = httptest.NewRecorder()
 	ctx, _ = gin.CreateTestContext(w)
 	ctx.Params = []gin.Param{{Key: "imageId", Value: "2"}}
-	mockIS.On("GetByID", uint(2)).Return(domain.Image{}, domain.ErrorImageNotFound).Once()
+	mockIS.On("GetByID", uint(2)).Return(models.Image{}, models.ErrorImageNotFound).Once()
 	views.ImageDetailView(ctx)
 	assert.Equal(t, http.StatusNotFound, w.Code)
 	resp, _ = io.ReadAll(w.Body)
@@ -47,7 +47,7 @@ func TestMediaViews_ImageDetailView(t *testing.T) {
 	w = httptest.NewRecorder()
 	ctx, _ = gin.CreateTestContext(w)
 	ctx.Params = []gin.Param{{Key: "imageId", Value: "1"}}
-	mockIS.On("GetByID", uint(1)).Return(domain.Image{ID: 1, Path: "image.png"}, nil).Once()
+	mockIS.On("GetByID", uint(1)).Return(models.Image{ID: 1, Path: "image.png"}, nil).Once()
 	views.ImageDetailView(ctx)
 	assert.Equal(t, http.StatusOK, w.Code)
 	resp, _ = io.ReadAll(w.Body)
@@ -120,7 +120,7 @@ func TestMediaViews_ImageCreateView_Success(t *testing.T) {
 		"test.png",
 		[]byte("image content"),
 	).Return(
-		domain.Image{ID: 1, Path: "image.png"},
+		models.Image{ID: 1, Path: "image.png"},
 		nil,
 	).Once()
 	views.ImageCreateView(ctx)

@@ -3,7 +3,7 @@
 package mocks
 
 import (
-	domain "github.com/ismailbayram/shopping/internal/media/domain/models"
+	models "github.com/ismailbayram/shopping/internal/media/models"
 	mock "github.com/stretchr/testify/mock"
 )
 
@@ -13,18 +13,18 @@ type ImageService struct {
 }
 
 // Create provides a mock function with given fields: _a0, _a1
-func (_m *ImageService) Create(_a0 string, _a1 []byte) (domain.Image, error) {
+func (_m *ImageService) Create(_a0 string, _a1 []byte) (models.Image, error) {
 	ret := _m.Called(_a0, _a1)
 
-	var r0 domain.Image
+	var r0 models.Image
 	var r1 error
-	if rf, ok := ret.Get(0).(func(string, []byte) (domain.Image, error)); ok {
+	if rf, ok := ret.Get(0).(func(string, []byte) (models.Image, error)); ok {
 		return rf(_a0, _a1)
 	}
-	if rf, ok := ret.Get(0).(func(string, []byte) domain.Image); ok {
+	if rf, ok := ret.Get(0).(func(string, []byte) models.Image); ok {
 		r0 = rf(_a0, _a1)
 	} else {
-		r0 = ret.Get(0).(domain.Image)
+		r0 = ret.Get(0).(models.Image)
 	}
 
 	if rf, ok := ret.Get(1).(func(string, []byte) error); ok {
@@ -37,18 +37,18 @@ func (_m *ImageService) Create(_a0 string, _a1 []byte) (domain.Image, error) {
 }
 
 // GetByID provides a mock function with given fields: _a0
-func (_m *ImageService) GetByID(_a0 uint) (domain.Image, error) {
+func (_m *ImageService) GetByID(_a0 uint) (models.Image, error) {
 	ret := _m.Called(_a0)
 
-	var r0 domain.Image
+	var r0 models.Image
 	var r1 error
-	if rf, ok := ret.Get(0).(func(uint) (domain.Image, error)); ok {
+	if rf, ok := ret.Get(0).(func(uint) (models.Image, error)); ok {
 		return rf(_a0)
 	}
-	if rf, ok := ret.Get(0).(func(uint) domain.Image); ok {
+	if rf, ok := ret.Get(0).(func(uint) models.Image); ok {
 		r0 = rf(_a0)
 	} else {
-		r0 = ret.Get(0).(domain.Image)
+		r0 = ret.Get(0).(models.Image)
 	}
 
 	if rf, ok := ret.Get(1).(func(uint) error); ok {

@@ -1,7 +1,7 @@
 package infrastructure
 
 import (
-	"github.com/ismailbayram/shopping/internal/users/domain"
+	"github.com/ismailbayram/shopping/internal/users/models"
 	"github.com/ismailbayram/shopping/test"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
@@ -14,7 +14,7 @@ type UserDBTestSuite struct {
 
 func (s *UserDBTestSuite) TestCreate() {
 	udbr := NewUserDBRepository(s.DB)
-	user, err := udbr.Create(domain.User{
+	user, err := udbr.Create(models.User{
 		Email:      "iso@iso.com",
 		FirstName:  "ismail",
 		LastName:   "bayram",
@@ -26,7 +26,7 @@ func (s *UserDBTestSuite) TestCreate() {
 	assert.Nil(s.T(), err)
 	assert.NotEqual(s.T(), uint(0), user.ID)
 
-	user, err = udbr.Create(domain.User{
+	user, err = udbr.Create(models.User{
 		Email:      "iso@iso.com",
 		FirstName:  "ismail",
 		LastName:   "bayram",
@@ -35,13 +35,13 @@ func (s *UserDBTestSuite) TestCreate() {
 		IsVerified: false,
 		Password:   "asdasd",
 	})
-	assert.Equal(s.T(), domain.ErrorGeneral, err)
+	assert.Equal(s.T(), models.ErrorGeneral, err)
 }
 
 func (s *UserDBTestSuite) TestUpdate() {
 	udbr := NewUserDBRepository(s.DB)
 
-	created, err := udbr.Create(domain.User{Email: "iso@iso.com"})
+	created, err := udbr.Create(models.User{Email: "iso@iso.com"})
 	assert.Nil(s.T(), err)
 
 	created.Email = "new@iso.com"
@@ -57,54 +57,54 @@ func (s *UserDBTestSuite) TestUpdate() {
 func (s *UserDBTestSuite) TestGetByID() {
 	udbr := NewUserDBRepository(s.DB)
 
-	created, err := udbr.Create(domain.User{Email: "test@png.com"})
+	created, err := udbr.Create(models.User{Email: "test@png.com"})
 	assert.Nil(s.T(), err)
 
 	user, err := udbr.GetByID(created.ID)
 	assert.Nil(s.T(), err)
-	assert.Equal(s.T(), domain.User{ID: user.ID, Email: "test@png.com"}, user)
+	assert.Equal(s.T(), models.User{ID: user.ID, Email: "test@png.com"}, user)
 
 	notExist, err := udbr.GetByID(0)
-	assert.Equal(s.T(), domain.ErrorUserNotFound, err)
-	assert.Equal(s.T(), domain.User{}, notExist)
+	assert.Equal(s.T(), models.ErrorUserNotFound, err)
+	assert.Equal(s.T(), models.User{}, notExist)
 }
 
 func (s *UserDBTestSuite) TestGetByEmail() {
 	udbr := NewUserDBRepository(s.DB)
 
-	created, err := udbr.Create(domain.User{Email: "test@png.com"})
+	created, err := udbr.Create(models.User{Email: "test@png.com"})
 	assert.Nil(s.T(), err)
 
 	user, err := udbr.GetByEmail(created.Email)
 	assert.Nil(s.T(), err)
-	assert.Equal(s.T(), domain.User{ID: user.ID, Email: "test@png.com"}, user)
+	assert.Equal(s.T(), models.User{ID: user.ID, Email: "test@png.com"}, user)
 
 	notExist, err := udbr.GetByEmail("none@mail.com")
-	assert.Equal(s.T(), domain.ErrorUserNotFound, err)
-	assert.Equal(s.T(), domain.User{}, notExist)
+	assert.Equal(s.T(), models.ErrorUserNotFound, err)
+	assert.Equal(s.T(), models.User{}, notExist)
 }
 
 func (s *UserDBTestSuite) TestGetByToken() {
 	udbr := NewUserDBRepository(s.DB)
 
-	created, err := udbr.Create(domain.User{Token: "token"})
+	created, err := udbr.Create(models.User{Token: "token"})
 	assert.Nil(s.T(), err)
 
 	user, err := udbr.GetByToken(created.Token)
 	assert.Nil(s.T(), err)
-	assert.Equal(s.T(), domain.User{ID: user.ID, Token: "token"}, user)
+	assert.Equal(s.T(), models.User{ID: user.ID, Token: "token"}, user)
 
 	notExist, err := udbr.GetByToken("none@mail.com")
-	assert.Equal(s.T(), domain.ErrorUserNotFound, err)
-	assert.Equal(s.T(), domain.User{}, notExist)
+	assert.Equal(s.T(), models.ErrorUserNotFound, err)
+	assert.Equal(s.T(), models.User{}, notExist)
 }
 
 func (s *UserDBTestSuite) TestAll() {
 	udbr := NewUserDBRepository(s.DB)
 
-	created1, err := udbr.Create(domain.User{Email: "test1@png.com", Token: "1"})
+	created1, err := udbr.Create(models.User{Email: "test1@png.com", Token: "1"})
 	assert.Nil(s.T(), err)
-	_, err = udbr.Create(domain.User{Email: "test2@png.com", Token: "2"})
+	_, err = udbr.Create(models.User{Email: "test2@png.com", Token: "2"})
 	assert.Nil(s.T(), err)
 
 	users, err := udbr.All(map[string]interface{}{})

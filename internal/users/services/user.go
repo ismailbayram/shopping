@@ -4,17 +4,17 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 	"fmt"
-	"github.com/ismailbayram/shopping/internal/users/domain"
+	"github.com/ismailbayram/shopping/internal/users/models"
 	"os"
 )
 
 type UserRepository interface {
-	Create(domain.User) (domain.User, error)
-	Update(domain.User) error
-	GetByID(uint) (domain.User, error)
-	GetByEmail(string) (domain.User, error)
-	GetByToken(string) (domain.User, error)
-	All(map[string]interface{}) ([]domain.User, error)
+	Create(models.User) (models.User, error)
+	Update(models.User) error
+	GetByID(uint) (models.User, error)
+	GetByEmail(string) (models.User, error)
+	GetByToken(string) (models.User, error)
+	All(map[string]interface{}) ([]models.User, error)
 }
 
 type EmailSender interface {
@@ -40,22 +40,22 @@ func NewUserService(userRepo UserRepository, emailSender EmailSender, cache User
 	}
 }
 
-func (us *UserService) GetByID(id uint) (domain.User, error) {
+func (us *UserService) GetByID(id uint) (models.User, error) {
 	return us.repo.GetByID(id)
 }
 
-func (us *UserService) GetByToken(token string) (domain.User, error) {
+func (us *UserService) GetByToken(token string) (models.User, error) {
 	return us.repo.GetByToken(token)
 }
 
 func (us *UserService) Login(email string, password string) (string, error) {
 	user, err := us.repo.GetByEmail(email)
 	if err != nil {
-		return "", domain.ErrorUserNotFound
+		return "", models.ErrorUserNotFound
 	}
 
 	if !user.IsVerified {
-		return "", domain.ErrorUserNotVerified
+		return "", models.ErrorUserNotVerified
 	}
 
 	if err := user.CheckPassword(password); err != nil {
@@ -68,10 +68,10 @@ func (us *UserService) Login(email string, password string) (string, error) {
 func (us *UserService) Register(email string, password string, firstName string, lastName string) error {
 	existed, _ := us.repo.GetByEmail(email)
 	if existed.ID != uint(0) {
-		return domain.ErrorUserAlreadyExists
+		return models.ErrorUserAlreadyExists
 	}
 
-	user := domain.User{
+	user := models.User{
 		Email:      email,
 		FirstName:  firstName,
 		LastName:   lastName,
@@ -93,7 +93,7 @@ func (us *UserService) Register(email string, password string, firstName string,
 func (us *UserService) Verify(token string) error {
 	user, err := us.repo.GetByToken(token)
 	if err != nil {
-		return domain.ErrorUserNotFound
+		return models.ErrorUserNotFound
 	}
 
 	user.IsVerified = true
@@ -104,7 +104,7 @@ func (us *UserService) Verify(token string) error {
 	return nil
 }
 
-func (us *UserService) ChangePassword(user domain.User, newPassword string) error {
+func (us *UserService) ChangePassword(user models.User, newPassword string) error {
 	user.SetPassword(newPassword)
 	if err := us.repo.Update(user); err != nil {
 		return err

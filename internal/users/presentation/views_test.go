@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
-	"github.com/ismailbayram/shopping/internal/users/domain"
+	"github.com/ismailbayram/shopping/internal/users/models"
 	"github.com/ismailbayram/shopping/test/mocks"
 	"github.com/stretchr/testify/assert"
 	"io"
@@ -47,9 +47,9 @@ func TestUserViews_Login_Failed(t *testing.T) {
 		"password": "123456",
 	})
 	ctx.Request = httptest.NewRequest("POST", "/users/login/", bytes.NewReader(reqBody))
-	mockedUS.On("Login", "nonexisted@gmail.com", "123456").Return("", domain.ErrorUserNotFound).Once()
+	mockedUS.On("Login", "nonexisted@gmail.com", "123456").Return("", models.ErrorUserNotFound).Once()
 	views.Login(ctx)
-	assert.Equal(t, domain.ErrorUserNotFound.Error(), ctx.Errors[0].Error())
+	assert.Equal(t, models.ErrorUserNotFound.Error(), ctx.Errors[0].Error())
 }
 
 func TestUserViews_Login_Success(t *testing.T) {
@@ -120,7 +120,7 @@ func TestUserViews_Register_Failed(t *testing.T) {
 	})
 	ctx.Request = httptest.NewRequest("POST", "/users/register/", bytes.NewReader(reqBody))
 	views.Register(ctx)
-	assert.Equal(t, domain.ErrorPasswordUnmatched.Error(), ctx.Errors[0].Error())
+	assert.Equal(t, models.ErrorPasswordUnmatched.Error(), ctx.Errors[0].Error())
 
 	// with existed user
 	w = httptest.NewRecorder()
@@ -133,9 +133,9 @@ func TestUserViews_Register_Failed(t *testing.T) {
 		"password2":  "123456",
 	})
 	ctx.Request = httptest.NewRequest("POST", "/users/register/", bytes.NewReader(reqBody))
-	mockedUS.On("Register", "iso@iso.com", "123456", "ismail", "bayram").Return(domain.ErrorUserAlreadyExists).Once()
+	mockedUS.On("Register", "iso@iso.com", "123456", "ismail", "bayram").Return(models.ErrorUserAlreadyExists).Once()
 	views.Register(ctx)
-	assert.Equal(t, domain.ErrorUserAlreadyExists.Error(), ctx.Errors[0].Error())
+	assert.Equal(t, models.ErrorUserAlreadyExists.Error(), ctx.Errors[0].Error())
 }
 
 func TestUserViews_Register_Success(t *testing.T) {
@@ -169,9 +169,9 @@ func TestUserViews_Verify_Failed(t *testing.T) {
 	ctx.Params = []gin.Param{
 		{Key: "token", Value: "invalid"},
 	}
-	mockedUS.On("Verify", "invalid").Return(domain.ErrorUserNotFound).Once()
+	mockedUS.On("Verify", "invalid").Return(models.ErrorUserNotFound).Once()
 	views.Verify(ctx)
-	assert.Equal(t, domain.ErrorUserNotFound.Error(), ctx.Errors[0].Error())
+	assert.Equal(t, models.ErrorUserNotFound.Error(), ctx.Errors[0].Error())
 }
 
 func TestUserViews_Verify_Success(t *testing.T) {
@@ -243,7 +243,7 @@ func TestUserViews_ChangePassword_Failed(t *testing.T) {
 	ctx.Request = httptest.NewRequest("POST", "/users/change-password/", bytes.NewReader(reqBody))
 	views.ChangePassword(ctx)
 	assert.Equal(t, 1, len(ctx.Errors))
-	assert.Equal(t, domain.ErrorPasswordUnmatched.Error(), ctx.Errors[0].Error())
+	assert.Equal(t, models.ErrorPasswordUnmatched.Error(), ctx.Errors[0].Error())
 
 	// with wrong old password
 	w = httptest.NewRecorder()
@@ -254,13 +254,13 @@ func TestUserViews_ChangePassword_Failed(t *testing.T) {
 		"new_password1": "newpassword",
 		"new_password2": "newpassword",
 	})
-	user := domain.User{ID: 1}
+	user := models.User{ID: 1}
 	user.SetPassword("oldpassword")
 	mockedUS.On("GetByID", uint(1)).Return(user, nil).Once()
 	ctx.Request = httptest.NewRequest("POST", "/users/change-password/", bytes.NewReader(reqBody))
 	views.ChangePassword(ctx)
 	assert.Equal(t, 1, len(ctx.Errors))
-	assert.Equal(t, domain.ErrorWrongPassword.Error(), ctx.Errors[0].Error())
+	assert.Equal(t, models.ErrorWrongPassword.Error(), ctx.Errors[0].Error())
 
 	// with service error.
 	w = httptest.NewRecorder()
@@ -272,11 +272,11 @@ func TestUserViews_ChangePassword_Failed(t *testing.T) {
 		"new_password2": "newpassword",
 	})
 	mockedUS.On("GetByID", uint(1)).Return(user, nil).Once()
-	mockedUS.On("ChangePassword", user, "newpassword").Return(domain.ErrorGeneral).Once()
+	mockedUS.On("ChangePassword", user, "newpassword").Return(models.ErrorGeneral).Once()
 	ctx.Request = httptest.NewRequest("POST", "/users/change-password/", bytes.NewReader(reqBody))
 	views.ChangePassword(ctx)
 	assert.Equal(t, 1, len(ctx.Errors))
-	assert.Equal(t, domain.ErrorGeneral.Error(), ctx.Errors[0].Error())
+	assert.Equal(t, models.ErrorGeneral.Error(), ctx.Errors[0].Error())
 }
 
 func TestUserViews_ChangePassword_Success(t *testing.T) {
@@ -292,7 +292,7 @@ func TestUserViews_ChangePassword_Success(t *testing.T) {
 		"new_password1": "newpassword",
 		"new_password2": "newpassword",
 	})
-	user := domain.User{ID: 1}
+	user := models.User{ID: 1}
 	user.SetPassword("oldpassword")
 	mockedUS.On("GetByID", uint(1)).Return(user, nil).Once()
 	mockedUS.On("ChangePassword", user, "newpassword").Return(nil).Once()

@@ -1,7 +1,7 @@
 package infrastructure
 
 import (
-	"github.com/ismailbayram/shopping/internal/users/domain"
+	"github.com/ismailbayram/shopping/internal/users/models"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
@@ -22,7 +22,7 @@ func TestUserCache_GetUserIDByVerificationToken(t *testing.T) {
 	cache.SetUserVerificationToken("token", 1)
 
 	userID, err := cache.GetUserIDByVerificationToken("xx")
-	assert.Equal(t, domain.ErrorUserNotFound, err)
+	assert.Equal(t, models.ErrorUserNotFound, err)
 	assert.Zero(t, userID)
 
 	userID, err = cache.GetUserIDByVerificationToken("token")

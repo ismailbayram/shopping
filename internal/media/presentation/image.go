@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/gin-gonic/gin"
-	domain "github.com/ismailbayram/shopping/internal/media/domain/models"
+	"github.com/ismailbayram/shopping/internal/media/models"
 	"log"
 	"net/http"
 	"strconv"
@@ -48,7 +48,7 @@ func (view *MediaViews) ImageCreateView(ctx *gin.Context) {
 	if err != nil {
 		log.Println(err)
 		ctx.JSON(http.StatusInternalServerError, gin.H{
-			"error": domain.ErrorGeneral,
+			"error": models.ErrorGeneral,
 		})
 		return
 	}
@@ -58,7 +58,7 @@ func (view *MediaViews) ImageCreateView(ctx *gin.Context) {
 	if err != nil {
 		log.Println(err)
 		ctx.JSON(http.StatusInternalServerError, gin.H{
-			"error": domain.ErrorGeneral,
+			"error": models.ErrorGeneral,
 		})
 		return
 	}

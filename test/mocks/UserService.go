@@ -3,7 +3,7 @@
 package mocks
 
 import (
-	domain "github.com/ismailbayram/shopping/internal/users/domain"
+	models "github.com/ismailbayram/shopping/internal/users/models"
 	mock "github.com/stretchr/testify/mock"
 )
 
@@ -13,11 +13,11 @@ type UserService struct {
 }
 
 // ChangePassword provides a mock function with given fields: _a0, _a1
-func (_m *UserService) ChangePassword(_a0 domain.User, _a1 string) error {
+func (_m *UserService) ChangePassword(_a0 models.User, _a1 string) error {
 	ret := _m.Called(_a0, _a1)
 
 	var r0 error
-	if rf, ok := ret.Get(0).(func(domain.User, string) error); ok {
+	if rf, ok := ret.Get(0).(func(models.User, string) error); ok {
 		r0 = rf(_a0, _a1)
 	} else {
 		r0 = ret.Error(0)
@@ -27,18 +27,18 @@ func (_m *UserService) ChangePassword(_a0 domain.User, _a1 string) error {
 }
 
 // GetByID provides a mock function with given fields: _a0
-func (_m *UserService) GetByID(_a0 uint) (domain.User, error) {
+func (_m *UserService) GetByID(_a0 uint) (models.User, error) {
 	ret := _m.Called(_a0)
 
-	var r0 domain.User
+	var r0 models.User
 	var r1 error
-	if rf, ok := ret.Get(0).(func(uint) (domain.User, error)); ok {
+	if rf, ok := ret.Get(0).(func(uint) (models.User, error)); ok {
 		return rf(_a0)
 	}
-	if rf, ok := ret.Get(0).(func(uint) domain.User); ok {
+	if rf, ok := ret.Get(0).(func(uint) models.User); ok {
 		r0 = rf(_a0)
 	} else {
-		r0 = ret.Get(0).(domain.User)
+		r0 = ret.Get(0).(models.User)
 	}
 
 	if rf, ok := ret.Get(1).(func(uint) error); ok {
@@ -51,18 +51,18 @@ func (_m *UserService) GetByID(_a0 uint) (domain.User, error) {
 }
 
 // GetByToken provides a mock function with given fields: _a0
-func (_m *UserService) GetByToken(_a0 string) (domain.User, error) {
+func (_m *UserService) GetByToken(_a0 string) (models.User, error) {
 	ret := _m.Called(_a0)
 
-	var r0 domain.User
+	var r0 models.User
 	var r1 error
-	if rf, ok := ret.Get(0).(func(string) (domain.User, error)); ok {
+	if rf, ok := ret.Get(0).(func(string) (models.User, error)); ok {
 		return rf(_a0)
 	}
-	if rf, ok := ret.Get(0).(func(string) domain.User); ok {
+	if rf, ok := ret.Get(0).(func(string) models.User); ok {
 		r0 = rf(_a0)
 	} else {
-		r0 = ret.Get(0).(domain.User)
+		r0 = ret.Get(0).(models.User)
 	}
 
 	if rf, ok := ret.Get(1).(func(string) error); ok {

@@ -1,14 +1,14 @@
 package services
 
 import (
-	domain "github.com/ismailbayram/shopping/internal/products/domain/models"
+	"github.com/ismailbayram/shopping/internal/products/models"
 	"github.com/ismailbayram/shopping/test/mocks"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
 
 func TestCategoryService_GetByID(t *testing.T) {
-	category := domain.Category{
+	category := models.Category{
 		ID:   2,
 		Name: "test",
 	}
@@ -17,7 +17,7 @@ func TestCategoryService_GetByID(t *testing.T) {
 	mockedPR := &mocks.ProductRepository{}
 	PS := NewCategoryService(mockedCR, mockedPR)
 
-	mockedCR.On("GetByID", uint(1)).Return(domain.Category{}, domain.ErrorCategoryNotFound)
+	mockedCR.On("GetByID", uint(1)).Return(models.Category{}, models.ErrorCategoryNotFound)
 	categoryGot, err := PS.GetByID(1)
 	assert.Equal(t, uint(0), categoryGot.ID)
 	assert.NotNil(t, err)
