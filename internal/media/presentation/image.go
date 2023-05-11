@@ -4,8 +4,6 @@ import (
 	"errors"
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"github.com/ismailbayram/shopping/internal/media/models"
-	"log"
 	"net/http"
 	"strconv"
 )
@@ -46,24 +44,22 @@ func (view *MediaViews) ImageCreateView(ctx *gin.Context) {
 	file, err := formFile.Open()
 	defer file.Close()
 	if err != nil {
-		log.Println(err)
-		ctx.JSON(http.StatusInternalServerError, gin.H{
-			"error": models.ErrorGeneral,
-		})
+		_ = ctx.Error(err).SetType(gin.ErrorTypePublic)
 		return
 	}
 
 	content := make([]byte, formFile.Size)
 	_, err = file.Read(content)
 	if err != nil {
-		log.Println(err)
-		ctx.JSON(http.StatusInternalServerError, gin.H{
-			"error": models.ErrorGeneral,
-		})
+		_ = ctx.Error(err).SetType(gin.ErrorTypePublic)
 		return
 	}
 
 	image, err := view.Service.Create(formFile.Filename, content)
+	if err != nil {
+		_ = ctx.Error(err).SetType(gin.ErrorTypePublic)
+		return
+	}
 
 	ctx.JSON(http.StatusOK, ToImageDTO(image))
 }
