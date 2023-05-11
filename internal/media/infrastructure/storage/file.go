@@ -12,9 +12,10 @@ import (
 
 type FileStorage struct {
 	baseDir string
+	baseUrl string
 }
 
-func NewFileStorage(mediaRoot string) FileStorage {
+func NewFileStorage(mediaRoot string, baseUrl string) FileStorage {
 	f, _ := os.Getwd()
 	baseDir := filepath.Join(filepath.Dir(f), filepath.Base(f), mediaRoot)
 
@@ -28,6 +29,7 @@ func NewFileStorage(mediaRoot string) FileStorage {
 
 	return FileStorage{
 		baseDir: baseDir,
+		baseUrl: baseUrl,
 	}
 }
 
@@ -45,6 +47,10 @@ func (ifs FileStorage) Upload(name string, content []byte) (string, error) {
 	}
 
 	return fileName, nil
+}
+
+func (ifs FileStorage) Url(path string) string {
+	return fmt.Sprintf("%s%s", ifs.baseUrl, path)
 }
 
 func generateFileName(name string) string {

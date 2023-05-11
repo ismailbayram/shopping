@@ -6,7 +6,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/ismailbayram/shopping/internal/media/models"
 	"github.com/ismailbayram/shopping/test/mocks"
-	"github.com/spf13/viper"
 	"github.com/stretchr/testify/assert"
 	"io"
 	"mime/multipart"
@@ -20,8 +19,6 @@ func TestMediaViews_ImageDetailView(t *testing.T) {
 	views := NewMediaViews(mockIS)
 	var payload map[string]any
 	gin.SetMode(gin.TestMode)
-	viper.Set("server.domain", "https://shopping.com")
-	viper.Set("server.mediaurl", "media")
 
 	// without imageId
 	w := httptest.NewRecorder()
@@ -47,7 +44,11 @@ func TestMediaViews_ImageDetailView(t *testing.T) {
 	w = httptest.NewRecorder()
 	ctx, _ = gin.CreateTestContext(w)
 	ctx.Params = []gin.Param{{Key: "imageId", Value: "1"}}
-	mockIS.On("GetByID", uint(1)).Return(models.Image{ID: 1, Path: "image.png"}, nil).Once()
+	mockIS.On("GetByID", uint(1)).Return(models.Image{
+		ID:   1,
+		Path: "image.png",
+		URL:  "https://shopping.com/media/image.png",
+	}, nil).Once()
 	views.ImageDetailView(ctx)
 	assert.Equal(t, http.StatusOK, w.Code)
 	resp, _ = io.ReadAll(w.Body)
@@ -102,8 +103,6 @@ func TestMediaViews_ImageCreateView_Success(t *testing.T) {
 	mockIS := &mocks.ImageService{}
 	views := NewMediaViews(mockIS)
 	gin.SetMode(gin.TestMode)
-	viper.Set("server.domain", "https://shopping.com")
-	viper.Set("server.mediaurl", "media")
 
 	buf := new(bytes.Buffer)
 	mw := multipart.NewWriter(buf)
@@ -120,7 +119,7 @@ func TestMediaViews_ImageCreateView_Success(t *testing.T) {
 		"test.png",
 		[]byte("image content"),
 	).Return(
-		models.Image{ID: 1, Path: "image.png"},
+		models.Image{ID: 1, Path: "image.png", URL: "https://shopping.com/media/image.png"},
 		nil,
 	).Once()
 	views.ImageCreateView(ctx)

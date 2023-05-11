@@ -3,13 +3,14 @@ package api
 import (
 	"github.com/gin-contrib/static"
 	"github.com/gin-gonic/gin"
+	"github.com/ismailbayram/shopping/config"
 	"github.com/ismailbayram/shopping/internal/application"
 )
 
-func NewRouter(app *application.Application) *gin.Engine {
+func NewRouter(app *application.Application, cfg config.ServerConfiguration) *gin.Engine {
 	router := gin.Default()
 
-	router.Use(static.Serve("/", static.LocalFile(app.MediaUrl, true)))
+	router.Use(static.Serve(cfg.MediaUrl, static.LocalFile("./media", true)))
 
 	router.Use(gin.Logger())
 	router.Use(PanicLoggerMiddleware)

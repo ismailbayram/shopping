@@ -6,8 +6,7 @@ import (
 )
 
 type Application struct {
-	SiteUrl  string
-	MediaUrl string
-	Users    users.Users
-	Media    media.Media
+	SiteUrl string
+	Users   users.Users
+	Media   media.Media
 }

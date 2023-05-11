@@ -13,6 +13,7 @@ var (
 type Image struct {
 	ID   uint
 	Path string
+	URL  string
 }
 
 func (i *Image) Url(baseUrl string) string {

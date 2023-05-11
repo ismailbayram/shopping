@@ -19,6 +19,7 @@ func TestImageService_GetByID(t *testing.T) {
 	IS := NewImageService(mockedIR, mockedIS)
 
 	mockedIR.On("GetByID", uint(1)).Return(models.Image{}, models.ErrorImageNotFound)
+	mockedIS.On("Url", "media/images/test.png").Return("http://localhost/media/images/test.png")
 	imageGot, err := IS.GetByID(1)
 	assert.Equal(t, uint(0), imageGot.ID)
 	assert.NotNil(t, err)
@@ -42,6 +43,7 @@ func TestImageService_Create(t *testing.T) {
 
 	mockedIS.On("Upload", "image.png", []byte("file content")).Return("images/image.png", nil).Once()
 	mockedIR.On("Create", models.Image{Path: "images/image.png"}).Return(models.Image{ID: 1, Path: "images/image.png"}, nil)
+	mockedIS.On("Url", "images/image.png").Return("http://localhost/media/images/test.png")
 	image, err = IS.Create("image.png", []byte("file content"))
 	assert.Nil(t, err)
 	assert.Equal(t, uint(1), image.ID)

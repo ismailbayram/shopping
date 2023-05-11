@@ -33,6 +33,20 @@ func (_m *ImageStorage) Upload(_a0 string, _a1 []byte) (string, error) {
 	return r0, r1
 }
 
+// Url provides a mock function with given fields: _a0
+func (_m *ImageStorage) Url(_a0 string) string {
+	ret := _m.Called(_a0)
+
+	var r0 string
+	if rf, ok := ret.Get(0).(func(string) string); ok {
+		r0 = rf(_a0)
+	} else {
+		r0 = ret.Get(0).(string)
+	}
+
+	return r0
+}
+
 type mockConstructorTestingTNewImageStorage interface {
 	mock.TestingT
 	Cleanup(func())

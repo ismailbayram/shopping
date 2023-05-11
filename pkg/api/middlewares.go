@@ -22,7 +22,6 @@ func PanicLoggerMiddleware(ctx *gin.Context) {
 			ctx.Error(err.(error))
 			//ctx.AbortWithStatus(http.StatusInternalServerError)
 			ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Something went wrong."})
-			fmt.Println("in recover")
 		}
 	}()
 

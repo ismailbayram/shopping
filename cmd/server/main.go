@@ -19,15 +19,14 @@ func main() {
 	db := database.New(&cfg.Database)
 
 	app := &application.Application{
-		SiteUrl:  cfg.Server.Domain,
-		MediaUrl: cfg.Server.MediaUrl,
-		Users:    users.New(db.Conn, cfg),
-		Media:    media.New(db.Conn, cfg.Storage.MediaRoot),
+		SiteUrl: cfg.Server.Domain,
+		Users:   users.New(db.Conn, cfg),
+		Media:   media.New(db.Conn, cfg.Storage.MediaRoot, cfg.Server.GetMediaUrl()),
 	}
 
 	s := &http.Server{
 		Addr:           fmt.Sprintf(":%s", cfg.Server.Port),
-		Handler:        api.NewRouter(app),
+		Handler:        api.NewRouter(app, cfg.Server),
 		ReadTimeout:    time.Duration(cfg.Server.Timeout) * time.Second,
 		WriteTimeout:   time.Duration(cfg.Server.Timeout) * time.Second,
 		MaxHeaderBytes: 1 << 20,

@@ -23,7 +23,7 @@ func (view *MediaViews) ImageDetailView(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusOK, ToImageDTO(view.GetBaseURL(), image))
+	ctx.JSON(http.StatusOK, ToImageDTO(image))
 }
 
 func (view *MediaViews) ImageCreateView(ctx *gin.Context) {
@@ -65,5 +65,5 @@ func (view *MediaViews) ImageCreateView(ctx *gin.Context) {
 
 	image, err := view.Service.Create(formFile.Filename, content)
 
-	ctx.JSON(http.StatusOK, ToImageDTO(view.GetBaseURL(), image))
+	ctx.JSON(http.StatusOK, ToImageDTO(image))
 }

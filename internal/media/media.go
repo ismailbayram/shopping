@@ -13,10 +13,10 @@ type Media struct {
 	ImageService services.ImageService
 }
 
-func New(db *gorm.DB, mediaRoot string) Media {
+func New(db *gorm.DB, mediaRoot string, mediaUrl string) Media {
 	imageService := services.NewImageService(
 		dbInfrastructure.NewImageDBRepository(db),
-		fileInfrastructure.NewFileStorage(mediaRoot),
+		fileInfrastructure.NewFileStorage(mediaRoot, mediaUrl),
 	)
 
 	return Media{

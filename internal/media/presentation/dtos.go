@@ -9,9 +9,9 @@ type ImageDTO struct {
 	Url string `json:"url"`
 }
 
-func ToImageDTO(baseUrl string, image models.Image) ImageDTO {
+func ToImageDTO(image models.Image) ImageDTO {
 	return ImageDTO{
 		ID:  int(image.ID),
-		Url: image.Url(baseUrl),
+		Url: image.URL,
 	}
 }

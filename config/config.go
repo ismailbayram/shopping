@@ -1,6 +1,7 @@
 package config
 
 import (
+	"fmt"
 	"github.com/joho/godotenv"
 	"os"
 	"strconv"
@@ -21,6 +22,10 @@ type ServerConfiguration struct {
 	Port     string
 	Timeout  int
 	MediaUrl string
+}
+
+func (s ServerConfiguration) GetMediaUrl() string {
+	return fmt.Sprintf("%s%s", s.Domain, s.MediaUrl)
 }
 
 type DatabaseConfiguration struct {
@@ -62,15 +67,19 @@ func Init() *Configuration {
 			Port:     os.Getenv("DB_PORT"),
 		},
 		Server: ServerConfiguration{
-			Domain:  os.Getenv("SW_DOMAIN"),
-			Port:    os.Getenv("SW_PORT"),
-			Timeout: convertInt("SW_TIMEOUT"),
+			Domain:   os.Getenv("SW_DOMAIN"),
+			Port:     os.Getenv("SW_PORT"),
+			Timeout:  convertInt("SW_TIMEOUT"),
+			MediaUrl: os.Getenv("MEDIA_URL"),
 		},
 		SMTP: SMTPConfiguration{
 			From:     os.Getenv("SMTP_FROM"),
 			Host:     os.Getenv("SMTP_HOST"),
 			Port:     os.Getenv("SMTP_PORT"),
 			Password: os.Getenv("SMTP_PASSWORD"),
+		},
+		Storage: StorageConfiguration{
+			MediaRoot: os.Getenv("MEDIA_ROOT"),
 		},
 	}
 }

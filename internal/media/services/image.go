@@ -11,6 +11,7 @@ type ImageRepository interface {
 
 type ImageStorage interface {
 	Upload(string, []byte) (string, error)
+	Url(string) string
 }
 
 type ImageService struct {
@@ -26,7 +27,13 @@ func NewImageService(repo ImageRepository, storage ImageStorage) ImageService {
 }
 
 func (is ImageService) GetByID(id uint) (models.Image, error) {
-	return is.repo.GetByID(id)
+	image, err := is.repo.GetByID(id)
+
+	if err != nil {
+		return models.Image{}, err
+	}
+	image.URL = is.storage.Url(image.Path)
+	return image, nil
 }
 
 func (is ImageService) Create(name string, content []byte) (models.Image, error) {
@@ -35,5 +42,12 @@ func (is ImageService) Create(name string, content []byte) (models.Image, error)
 		return models.Image{}, models.ErrorGeneral
 	}
 
-	return is.repo.Create(models.Image{Path: path})
+	image, err := is.repo.Create(models.Image{Path: path})
+	if err != nil {
+		return models.Image{}, models.ErrorGeneral
+	}
+
+	image.URL = is.storage.Url(image.Path)
+
+	return image, nil
 }
